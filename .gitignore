@@ -50,3 +50,18 @@ __pycache__
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# scripts tooling
+scripts/node_modules/
+scripts/package-lock.json
+scripts/system-voices/
+scripts/system-voices-cmu/
+scripts/system-voices-librivox/
+scripts/system-voices-vctk/
+scripts/system-voices-libritts/
+
+# playwright artifacts
+.playwright-mcp/
+
+# local build output
+.tmp/

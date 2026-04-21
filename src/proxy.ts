@@ -1,14 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/v1(.*)",
+  "/api/mcp(.*)",
+  "/docs(.*)",
+]);
 
 const isOrgSelectionRoute = createRouteMatcher(["/org-selection(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, orgId } = await auth();
 
-  // Allow public routes
+  // Allow public routes (API v1 and MCP handle their own API key auth)
   if (isPublicRoute(req)) {
     return NextResponse.next();
   }
@@ -34,8 +41,8 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Skip Next.js internals, static files, and the landing page root "/"
+    '/((?!_next|$|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],

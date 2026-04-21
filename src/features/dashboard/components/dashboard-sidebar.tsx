@@ -21,7 +21,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { 
   OrganizationSwitcher,
   UserButton,
-  useClerk
 } from "@clerk/nextjs";
 import {
   type LucideIcon,
@@ -97,13 +96,12 @@ function NavSection({ label, items, pathname }: NavSectionProps) {
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const clerk = useClerk();
   const [voiceDialogOpen, setVoiceDialogOpen] = useState(false);
 
   const mainMenuItems: MenuItem[] = [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/dashboard",
       icon: Home,
     },
     {
@@ -126,8 +124,8 @@ export function DashboardSidebar() {
   const othersMenuItems: MenuItem[] = [
     {
       title: "Settings",
+      url: "/settings",
       icon: Settings,
-      onClick: () => clerk.openOrganizationProfile(),
     },
     {
       title: "Help and support",
@@ -148,13 +146,13 @@ export function DashboardSidebar() {
         className="flex items-center gap-2 pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
           <Image
             src="/logo.svg"
-            alt="Resonance"
+            alt="Voicemagic"
             width={24}
             height={24}
             className="rounded-sm"
           />
           <span className="group-data-[collapsible=icon]:hidden font-semibold text-lg tracking-tighter text-foreground">
-            Resonance
+            Voicemagic
           </span>
           <SidebarTrigger className="ml-auto lg:hidden" />
         </div>

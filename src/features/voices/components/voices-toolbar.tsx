@@ -1,73 +1,67 @@
+"use client";
+
 import { useState } from "react";
+import { Heart, Mic, Search, Sparkles } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
-import { Search, Sparkles } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  InputGroup,
-  InputGroupInput,
-  InputGroupAddon,
-} from "@/components/ui/input-group";
-import { voicesSearchParams } from "@/features/voices/lib/params";
-import { VoiceCreateDialog } from "./voice-create-dialog";
+import { voicesSearchParams, type VoiceView } from "../lib/params";
 
-export function VoicesToolbar() {
-  const [query, setQuery] = useQueryState(
-    "query",
-    voicesSearchParams.query
-  );
-  const [localQuery, setLocalQuery] = useState(query);
+interface VoicesToolbarProps {
+  counts: { total: number; favorites: number; cloned: number };
+}
 
-  const debouncedSetQuery = useDebouncedCallback(
+const VIEWS: { id: VoiceView; label: string; icon: typeof Mic; key: "total" | "favorites" | "cloned" }[] = [
+  { id: "all",       label: "All voices",  icon: Sparkles, key: "total" },
+  { id: "favorites", label: "Favorites",   icon: Heart,    key: "favorites" },
+  { id: "cloned",    label: "My clones",   icon: Mic,      key: "cloned" },
+];
+
+export function VoicesToolbar({ counts }: VoicesToolbarProps) {
+  const [view, setView] = useQueryState("view", voicesSearchParams.view);
+  const [query, setQuery] = useQueryState("query", voicesSearchParams.query);
+  const [local, setLocal] = useState(query);
+
+  const debounced = useDebouncedCallback(
     (value: string) => setQuery(value),
-    300,
+    250,
   );
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h2 className="text-xl lg:text-2xl font-semibold tracking-tight">
-          All Libraries
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Discover your voices, or make your own
-        </p>
+    <div className="vx-toolbar">
+      <div className="vx-tabs" role="tablist">
+        {VIEWS.map((v) => {
+          const Icon = v.icon;
+          const active = view === v.id;
+          return (
+            <button
+              key={v.id}
+              role="tab"
+              aria-selected={active}
+              className={`vx-tab ${active ? "on" : ""}`}
+              onClick={() => setView(v.id)}
+              type="button"
+            >
+              <Icon size={14} />
+              <span>{v.label}</span>
+              <span className="vx-tab-count">{counts[v.key]}</span>
+            </button>
+          );
+        })}
       </div>
 
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-3">
-          <InputGroup className="lg:max-w-sm">
-            <InputGroupAddon>
-              <Search className="size-4" />
-            </InputGroupAddon>
-            <InputGroupInput
-              placeholder="Search voices..."
-              value={localQuery}
-              onChange={(e) => {
-                setLocalQuery(e.target.value);
-                debouncedSetQuery(e.target.value);
-              }}
-            />
-          </InputGroup>
-          <div className="ml-auto hidden lg:block">
-            <VoiceCreateDialog>
-              <Button size="sm">
-                <Sparkles />
-                Custom voice
-              </Button>
-            </VoiceCreateDialog>
-          </div>
-          <div className="lg:hidden">
-            <VoiceCreateDialog>
-              <Button size="sm" className="w-full">
-                <Sparkles />
-                Custom voice
-              </Button>
-            </VoiceCreateDialog>
-          </div>
-        </div>
-      </div>
+      <label className="vx-search">
+        <Search size={15} />
+        <input
+          type="search"
+          placeholder="Search by name or description…"
+          value={local}
+          onChange={(e) => {
+            setLocal(e.target.value);
+            debounced(e.target.value);
+          }}
+        />
+      </label>
     </div>
   );
-};
+}

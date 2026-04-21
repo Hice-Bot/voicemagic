@@ -19,13 +19,13 @@ export function TextToSpeechView({
   initialValues?: Partial<TTSFormValues>;
 }) {
   const trpc = useTRPC();
-  const { 
-    data: voices,
+  const {
+    data,
   } = useSuspenseQuery(trpc.voices.getAll.queryOptions());
 
-  const { custom: customVoices, system: systemVoices } = voices;
-
-  const allVoices = [...customVoices, ...systemVoices];
+  const allVoices = data.voices;
+  const customVoices = allVoices.filter((v) => v.variant === "CUSTOM");
+  const systemVoices = allVoices.filter((v) => v.variant === "SYSTEM");
   const fallbackVoiceId = allVoices[0]?.id ?? "";
 
   // Requested voice may no longer exist (deleted); fall back to first available

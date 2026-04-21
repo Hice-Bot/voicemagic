@@ -30,8 +30,9 @@ export function TextToSpeechDetailView({
   });
 
   const data = generationQuery.data;
-  const { custom: customVoices, system: systemVoices } = voicesQuery.data;
-  const allVoices = [...customVoices, ...systemVoices];
+  const allVoices = voicesQuery.data.voices;
+  const customVoices = allVoices.filter((v) => v.variant === "CUSTOM");
+  const systemVoices = allVoices.filter((v) => v.variant === "SYSTEM");
 
   const fallbackVoiceId = allVoices[0]?.id ?? "";
 

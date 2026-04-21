@@ -20,8 +20,8 @@ import modal
 #   --output output.wav
 
 # R2 cloud bucket mount (read-only, replaces Modal Volume)
-R2_BUCKET_NAME = "<bucket-name>"
-R2_ACCOUNT_ID = "<account-id>"
+R2_BUCKET_NAME = "voicemagic"
+R2_ACCOUNT_ID = "ca518833f008db9241736305fd3e8487"
 R2_MOUNT_PATH = "/r2"
 r2_bucket = modal.CloudBucketMount(
     R2_BUCKET_NAME,

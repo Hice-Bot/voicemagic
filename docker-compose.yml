@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        SKIP_ENV_VALIDATION: "1"
+    ports:
+      - "3100:3000"
+    env_file: .env
+    restart: unless-stopped
