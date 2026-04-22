@@ -27,9 +27,9 @@ export function TextInputPanel() {
   const isValid = useStore(form.store, (s) => s.isValid);
 
   return (
-    <div className="flex h-full min-h-0 flex-col flex-1">
+    <div className="flex h-full min-h-0 flex-col flex-1 gap-3 p-4 lg:p-6">
       {/* Text input area */}
-      <div className="relative min-h-0 flex-1">
+      <div className="relative min-h-0 flex-1 rounded-xl border border-white/8 bg-zinc-900/60 shadow-inner overflow-hidden">
         <form.Field name="text">
           {(field) => (
             <Textarea
@@ -43,10 +43,10 @@ export function TextInputPanel() {
           )}
         </form.Field>
         {/* Bottom fade overlay */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-background to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-zinc-900/60 to-transparent" />
       </div>
       {/* Action bar */}
-      <div className="shrink-0 p-4 lg:p-6">
+      <div className="shrink-0">
         {/* Mobile layout */}
         <div className="flex flex-col gap-3 lg:hidden">
           <div className="flex items-center gap-2">

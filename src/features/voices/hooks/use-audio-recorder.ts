@@ -81,7 +81,12 @@ export function useAudioRecorder() {
       setAudioBlob(null);
       setElapsedTime(0);
 
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setError("Microphone access requires a secure (HTTPS) connection. Please use https://voicemagic.dev instead of the direct IP.");
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: true
       });
       streamRef.current = stream;
@@ -108,12 +113,19 @@ export function useAudioRecorder() {
     } catch (err) {
       cleanup();
 
-      if (err instanceof DOMException && err.name === "NotAllowedError") {
-        setError(
-          "Microphone access denied. Please allow microphone access in your browser settings.",
-        );
+      const name = (err as { name?: string })?.name ?? "";
+      const message = (err as { message?: string })?.message ?? String(err);
+
+      if (name === "NotAllowedError" || name === "PermissionDeniedError") {
+        setError("Microphone access denied. Please allow microphone access in your browser settings.");
+      } else if (name === "NotFoundError" || name === "DevicesNotFoundError") {
+        setError("No microphone detected. Please connect a microphone and try again.");
+      } else if (name === "NotReadableError" || name === "TrackStartError") {
+        setError("Microphone is in use by another app. Please close other apps using the mic and try again.");
+      } else if (name === "SecurityError") {
+        setError("Microphone access blocked. Make sure you're using a secure (HTTPS) connection.");
       } else {
-        setError("Failed to access microphone. Please check your device.");
+        setError(`Microphone error (${name || "unknown"}): ${message}`);
       }
     }
   }, [cleanup]);

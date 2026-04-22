@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { Headphones, ThumbsUp } from "lucide-react";
+import { Headphones } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -21,12 +21,6 @@ export function DashboardHeader() {
       </div>
 
       <div className="lg:flex items-center gap-3 hidden">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="mailto:business@codewithantonio.com">
-            <ThumbsUp />
-            <span className="hidden lg:block">Feedback</span>
-          </Link>
-        </Button>
         <Button variant="outline" size="sm" asChild>
           <Link href="mailto:business@codewithantonio.com">
             <Headphones />

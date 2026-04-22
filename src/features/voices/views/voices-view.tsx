@@ -9,7 +9,7 @@ import type { VoiceCategory } from "@/generated/prisma/client";
 import { VoiceCard } from "../components/voice-card";
 import { VoiceFilterSidebar } from "../components/voice-filter-sidebar";
 import { VoicesToolbar } from "../components/voices-toolbar";
-import { VoiceCreateDialog } from "../components/voice-create-dialog";
+import Link from "next/link";
 import { voicesSearchParams } from "../lib/params";
 
 function EmptyState({ view }: { view: string }) {
@@ -30,12 +30,10 @@ function EmptyState({ view }: { view: string }) {
         <p className="vx-empty-sub">
           Record 10 seconds to create your first custom voice.
         </p>
-        <VoiceCreateDialog>
-          <button type="button" className="app-btn-p">
-            <Sparkles size={14} />
-            Clone a voice
-          </button>
-        </VoiceCreateDialog>
+        <Link href="/voice-cloning" className="app-btn-p">
+          <Sparkles size={14} />
+          Clone a voice
+        </Link>
       </div>
     );
   }

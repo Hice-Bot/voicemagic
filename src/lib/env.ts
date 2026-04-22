@@ -3,6 +3,7 @@ import { createEnv } from "@t3-oss/env-nextjs";
 
 export const env = createEnv({
   server: {
+    ADMIN_USER_IDS: z.string().default(""),
     POLAR_ACCESS_TOKEN: z.string().min(1),
     POLAR_SERVER: z.enum(["sandbox", "production"]).default("sandbox"),
     POLAR_PRODUCT_ID: z.string().min(1),

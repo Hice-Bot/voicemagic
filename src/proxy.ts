@@ -10,30 +10,14 @@ const isPublicRoute = createRouteMatcher([
   "/docs(.*)",
 ]);
 
-const isOrgSelectionRoute = createRouteMatcher(["/org-selection(.*)"]);
-
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, orgId } = await auth();
-
-  // Allow public routes (API v1 and MCP handle their own API key auth)
   if (isPublicRoute(req)) {
     return NextResponse.next();
   }
 
-  // Protect non-public routes
+  const { userId } = await auth();
   if (!userId) {
     await auth.protect();
-  }
-
-  // Allow org selection page
-  if (isOrgSelectionRoute(req)) {
-    return NextResponse.next();
-  }
-
-  // For all protected routes, ensure org is selected
-  if (userId && !orgId) {
-    const orgSelection = new URL("/org-selection", req.url);
-    return NextResponse.redirect(orgSelection);
   }
 
   return NextResponse.next();
