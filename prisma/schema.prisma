@@ -103,6 +103,34 @@ model Generation {
   @@index([orgId])
   @@index([voiceId])
 }
+model SupportConfig {
+  id               String   @id @default(cuid())
+  model            String   @default("claude-haiku-4-5-20251001")
+  systemPrompt     String   @default("You are a helpful support assistant. Answer questions clearly and concisely.")
+  welcomeMessage   String   @default("Hi! How can I help you today?")
+  title            String   @default("Support")
+  inputPlaceholder String   @default("Type a message...")
+  defaultOpen      Boolean  @default(false)
+  accentColor      String   @default("#6366f1")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  knowledgeBase    SupportKnowledgeBase[]
+}
+
+model SupportKnowledgeBase {
+  id              String        @id @default(cuid())
+  configId        String
+  config          SupportConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  title           String
+  content         String
+  sortOrder       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([configId])
+}
+
 model PlanConfig {
   id               String   @id @default(cuid())
   key              String   @unique

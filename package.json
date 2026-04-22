@@ -11,6 +11,7 @@
     "sync-api": "tsx scripts/sync-api.ts"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.71",
     "@anthropic-ai/sdk": "^0.90.0",
     "@aws-sdk/client-s3": "^3.997.0",
     "@aws-sdk/s3-request-presigner": "^3.997.0",
@@ -31,6 +32,7 @@
     "@trpc/server": "^11.10.0",
     "@trpc/tanstack-react-query": "^11.10.0",
     "@types/recordrtc": "^5.6.15",
+    "ai": "^6.0.168",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",

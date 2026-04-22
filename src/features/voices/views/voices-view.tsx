@@ -74,12 +74,10 @@ export function VoicesView() {
           </p>
         </div>
         <div className="vx-header-actions">
-          <VoiceCreateDialog>
-            <button type="button" className="app-btn-p">
-              <Sparkles size={14} />
-              Clone a voice
-            </button>
-          </VoiceCreateDialog>
+          <Link href="/voice-cloning" className="app-btn-p">
+            <Sparkles size={14} />
+            Clone a voice
+          </Link>
         </div>
       </header>
 

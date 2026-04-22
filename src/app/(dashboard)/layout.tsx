@@ -5,6 +5,7 @@ import {
   SidebarProvider
 } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/features/dashboard/components/dashboard-sidebar";
+import { SupportChatWidget } from "@/lib/supportbot";
 
 export default async function DashboardLayout({
   children,
@@ -22,6 +23,13 @@ export default async function DashboardLayout({
           {children}
         </main>
       </SidebarInset>
+      <SupportChatWidget
+        config={{
+          title: "Voicemagic Support",
+          welcomeMessage: "Need help with Voicemagic? Ask me anything.",
+          accentColor: "#7c3aed",
+        }}
+      />
     </SidebarProvider>
   )
 };

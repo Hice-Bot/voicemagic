@@ -180,4 +180,55 @@ export const adminRouter = createTRPCRouter({
       await prisma.planConfig.delete({ where: { id: input.id } });
       return { success: true };
     }),
+
+  getSupportConfig: adminProcedure.query(async () => {
+    return prisma.supportConfig.findFirst({ include: { knowledgeBase: { orderBy: { sortOrder: "asc" } } } });
+  }),
+
+  upsertSupportConfig: adminProcedure
+    .input(
+      z.object({
+        model: z.string().min(1),
+        systemPrompt: z.string().min(1),
+        welcomeMessage: z.string().min(1),
+        title: z.string().min(1),
+        inputPlaceholder: z.string().min(1),
+        defaultOpen: z.boolean(),
+        accentColor: z.string().min(1),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const existing = await prisma.supportConfig.findFirst();
+      if (existing) {
+        return prisma.supportConfig.update({ where: { id: existing.id }, data: input });
+      }
+      return prisma.supportConfig.create({ data: input });
+    }),
+
+  addKbDoc: adminProcedure
+    .input(z.object({ title: z.string().min(1), content: z.string().min(1) }))
+    .mutation(async ({ input }) => {
+      let cfg = await prisma.supportConfig.findFirst();
+      if (!cfg) {
+        cfg = await prisma.supportConfig.create({ data: {} });
+      }
+      const maxOrder = await prisma.supportKnowledgeBase.count({ where: { configId: cfg.id } });
+      return prisma.supportKnowledgeBase.create({
+        data: { configId: cfg.id, title: input.title, content: input.content, sortOrder: maxOrder },
+      });
+    }),
+
+  updateKbDoc: adminProcedure
+    .input(z.object({ id: z.string(), title: z.string().min(1), content: z.string().min(1) }))
+    .mutation(async ({ input }) => {
+      const { id, ...data } = input;
+      return prisma.supportKnowledgeBase.update({ where: { id }, data });
+    }),
+
+  deleteKbDoc: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      await prisma.supportKnowledgeBase.delete({ where: { id: input.id } });
+      return { success: true };
+    }),
 });

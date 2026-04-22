@@ -1,13 +1,14 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BarChart3, Users, Zap, LayoutDashboard, CreditCard } from "lucide-react";
+import { BarChart3, Users, Zap, LayoutDashboard, CreditCard, MessageCircle } from "lucide-react";
 
 const ADMIN_NAV = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/generations", label: "Generations", icon: Zap },
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
+  { href: "/admin/support", label: "Support Chat", icon: MessageCircle },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
