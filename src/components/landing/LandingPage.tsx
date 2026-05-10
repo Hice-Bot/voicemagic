@@ -188,11 +188,11 @@ function Nav() {
           <a href="#features">Features</a>
           <a href="#voices">Voices</a>
           <a href="#api">API</a>
-          <a href="#pricing">Pricing</a>
+          <Link href="/pricing">Pricing</Link>
         </div>
         <div className="nav-ctas">
           <Link href="/sign-in" className="nav-signin">Sign in</Link>
-          <Link href="/sign-up" className="btn btn-primary btn-sm">Start for free</Link>
+          <Link href="/pricing" className="btn btn-primary btn-sm">Start for free</Link>
         </div>
       </div>
     </nav>
@@ -213,7 +213,7 @@ function Hero() {
           <span className="pill-arrow">→</span>
         </div>
         <h1 className="hero-headline">
-          <span className="hl-line hl-1">Your voice.</span>
+          <span className="hl-line hl-1">Any voice.</span>
           <span className="hl-line hl-2">Cloned in seconds.</span>
           <span className="hl-line hl-3">Or not.</span>
         </h1>
@@ -221,8 +221,8 @@ function Hero() {
           Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 200 professional voices — ready to generate natural, expressive speech from any text.
         </p>
         <div className="hero-ctas">
-          <Link href="/sign-up" className="btn btn-primary btn-lg">
-            Clone Your Voice Free
+          <Link href="/pricing" className="btn btn-primary btn-lg">
+            Clone Any Voice Free
             <span className="btn-arrow">→</span>
           </Link>
           <a href="#voices" className="btn btn-ghost btn-lg">
@@ -417,7 +417,7 @@ function Features() {
             {i === 0 && (
               <div className="feat-lg-visual">
                 <div className="feat-lg-row">
-                  <VoiceAvatar name="Your Voice" hue={290} size={36} />
+                  <VoiceAvatar name="Any Voice" hue={290} size={36} />
                   <Waveform seed={17} bars={40} active={true} height={30} />
                   <span className="feat-lg-tag">cloned · 00:09</span>
                 </div>
@@ -640,7 +640,7 @@ const PRICING_PLANS = [
   },
 ];
 
-function PricingSection() {
+export function PricingSection() {
   return (
     <section id="pricing" className="pricing-sec">
       <div className="pricing-orbit pricing-orbit-1" />
@@ -858,7 +858,7 @@ function FinalCTA() {
         </h2>
         <p className="fcta-sub">Sign up free. Clone your first voice in under a minute. No credit card required.</p>
         <div className="fcta-ctas">
-          <Link href="/sign-up" className="btn btn-primary btn-xl">
+          <Link href="/pricing" className="btn btn-primary btn-xl">
             Get Started Free
             <span className="btn-arrow">→</span>
           </Link>
@@ -883,7 +883,7 @@ function Footer() {
             <div className="foot-head">Product</div>
             <a href="#features">Features</a>
             <a href="#voices">Voices</a>
-            <a href="#pricing">Pricing</a>
+            <Link href="/pricing">Pricing</Link>
             <a href="#">Changelog</a>
           </div>
           <div className="foot-col">
