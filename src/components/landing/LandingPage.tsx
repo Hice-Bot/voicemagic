@@ -576,6 +576,136 @@ function UseCases() {
   );
 }
 
+// ── Pricing ──────────────────────────────────────────────────────────────────
+const PRICING_PLANS = [
+  {
+    name: "Free",
+    key: "free",
+    eyebrow: "No credit card required",
+    price: "$0",
+    cadence: "forever",
+    credits: "10k credits / month",
+    voiceLimit: "1 custom voice",
+    description: "Try Voicemagic, test the voices, and generate real audio without putting a card on file.",
+    cta: "Start free",
+    href: "/sign-up",
+    features: [
+      "200 built-in voices",
+      "10k monthly generation credits",
+      "1 custom voice clone",
+      "WAV downloads",
+      "Browser recording",
+    ],
+  },
+  {
+    name: "Standard",
+    key: "standard",
+    eyebrow: "For regular creators",
+    price: "$12",
+    cadence: "per month",
+    credits: "250k credits / month",
+    voiceLimit: "10 custom voices",
+    description: "The practical plan for videos, podcasts, support snippets, and weekly production work.",
+    cta: "Upgrade to Standard",
+    href: "/sign-up",
+    highlighted: true,
+    features: [
+      "Everything in Free",
+      "250k monthly generation credits",
+      "10 custom voice clones",
+      "Priority generation queue",
+      "Commercial usage",
+      "Email support",
+    ],
+  },
+  {
+    name: "Pro",
+    key: "pro",
+    eyebrow: "For heavier workflows",
+    price: "$29",
+    cadence: "per month",
+    credits: "1M credits / month",
+    voiceLimit: "50 custom voices",
+    description: "For teams, automation, API workflows, and larger content libraries that need headroom.",
+    cta: "Go Pro",
+    href: "/sign-up",
+    features: [
+      "Everything in Standard",
+      "1M monthly generation credits",
+      "50 custom voice clones",
+      "API access",
+      "Early feature access",
+      "Priority support",
+    ],
+  },
+];
+
+function PricingSection() {
+  return (
+    <section id="pricing" className="pricing-sec">
+      <div className="pricing-orbit pricing-orbit-1" />
+      <div className="pricing-orbit pricing-orbit-2" />
+      <div className="section-head pricing-head">
+        <div className="kicker">Pricing</div>
+        <h2 className="section-h2">Simple credits. Generous limits.</h2>
+        <p className="section-sub">
+          We run Voicemagic lean, so pricing is based on practical usage instead
+          of scary AI-token math. Start free, then upgrade when you need more room.
+        </p>
+      </div>
+
+      <div className="pricing-grid">
+        {PRICING_PLANS.map((plan) => (
+          <article
+            key={plan.key}
+            className={`price-card${plan.highlighted ? " price-card-featured" : ""}`}
+          >
+            {plan.highlighted && <div className="price-ribbon">Recommended</div>}
+            <div className="price-top">
+              <div>
+                <div className="price-eyebrow">{plan.eyebrow}</div>
+                <h3 className="price-name">{plan.name}</h3>
+              </div>
+              <div className="price-chip">{plan.credits}</div>
+            </div>
+
+            <div className="price-row">
+              <span className="price-value">{plan.price}</span>
+              <span className="price-cadence">/{plan.cadence}</span>
+            </div>
+            <p className="price-desc">{plan.description}</p>
+
+            <div className="credit-meter" aria-hidden="true">
+              <span className={`credit-fill credit-fill-${plan.key}`} />
+            </div>
+            <div className="price-meta">
+              <span>{plan.voiceLimit}</span>
+              <span>1 credit ≈ 1 character</span>
+            </div>
+
+            <Link
+              href={plan.href}
+              className={`price-cta${plan.highlighted ? " price-cta-primary" : ""}`}
+            >
+              {plan.cta}
+              <span>→</span>
+            </Link>
+
+            <ul className="price-features">
+              {plan.features.map((feature) => (
+                <li key={feature}>
+                  <span className="price-check">✓</span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── API Section ───────────────────────────────────────────────────────────────
 const CodeIcon = () => (
   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -795,6 +925,7 @@ export function LandingPage() {
       <Features />
       <VoiceShowcase />
       <UseCases />
+      <PricingSection />
       <ApiSection />
       <FinalCTA />
       <Footer />
