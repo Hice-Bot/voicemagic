@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { createNoise3D } from "simplex-noise";
 
 import { cn } from "@/lib/utils";
@@ -40,7 +40,10 @@ export const WavyBackground = ({
   ...props
 }: WavyBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isSafari, setIsSafari] = useState(false);
+  const isSafari =
+    typeof navigator !== "undefined" &&
+    navigator.userAgent.includes("Safari") &&
+    !navigator.userAgent.includes("Chrome");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,15 +98,6 @@ export const WavyBackground = ({
       cancelAnimationFrame(animationId);
     };
   }, [backgroundFill, blur, colors, speed, waveOpacity, waveWidth, waveYOffset]);
-
-  useEffect(() => {
-    // Safari needs CSS blur instead of canvas ctx.filter for consistent output.
-    setIsSafari(
-      typeof window !== "undefined" &&
-        navigator.userAgent.includes("Safari") &&
-        !navigator.userAgent.includes("Chrome")
-    );
-  }, []);
 
   return (
     <div
