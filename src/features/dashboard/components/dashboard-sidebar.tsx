@@ -28,6 +28,7 @@ import {
   Headphones,
   ShieldCheck,
   LogOut,
+  Braces,
 } from "lucide-react";
 import Link from "next/link";
 import { UsageContainer } from "@/features/billing/components/usage-container";
@@ -123,6 +124,11 @@ export function DashboardSidebar({ isAdmin = false }: { isAdmin?: boolean }) {
       title: "Voice cloning",
       url: "/voice-cloning",
       icon: Volume2,
+    },
+    {
+      title: "API/MCP",
+      url: "/api-mcp",
+      icon: Braces,
     },
   ];
 
