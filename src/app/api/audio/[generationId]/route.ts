@@ -6,16 +6,16 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ generationId: string }> },
 ) {
-  const { userId, orgId } = await auth();
+  const { userId } = await auth();
 
-  if (!userId || !orgId) {
+  if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const { generationId } = await params;
 
   const generation = await prisma.generation.findUnique({
-    where: { id: generationId, orgId },
+    where: { id: generationId, orgId: userId },
   });
 
   if (!generation) {
