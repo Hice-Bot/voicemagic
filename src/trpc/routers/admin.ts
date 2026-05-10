@@ -150,7 +150,41 @@ export const adminRouter = createTRPCRouter({
         nextCursor = items.pop()!.id;
       }
 
-      return { items, nextCursor };
+      const uniqueUserIds = Array.from(new Set(items.map((i) => i.orgId)));
+      const userMap: Record<
+        string,
+        { name: string; email: string; imageUrl: string }
+      > = {};
+      if (uniqueUserIds.length > 0) {
+        try {
+          const clerk = await clerkClient();
+          const { data: users } = await clerk.users.getUserList({
+            userId: uniqueUserIds,
+            limit: uniqueUserIds.length,
+          });
+          for (const u of users) {
+            userMap[u.id] = {
+              name:
+                [u.firstName, u.lastName].filter(Boolean).join(" ") ||
+                u.username ||
+                u.emailAddresses[0]?.emailAddress ||
+                u.id,
+              email: u.emailAddresses[0]?.emailAddress ?? "",
+              imageUrl: u.imageUrl,
+            };
+          }
+        } catch {
+          // If Clerk lookup fails, fall back to showing IDs
+        }
+      }
+
+      return {
+        items: items.map((i) => ({
+          ...i,
+          user: userMap[i.orgId] ?? { name: i.orgId, email: "", imageUrl: "" },
+        })),
+        nextCursor,
+      };
     }),
 
   deleteGeneration: adminProcedure

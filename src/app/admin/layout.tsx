@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BarChart3, Users, Zap, LayoutDashboard, CreditCard, MessageCircle } from "lucide-react";
+import { BarChart3, Users, Zap, LayoutDashboard, CreditCard, MessageCircle, ArrowLeft } from "lucide-react";
 
 const ADMIN_NAV = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -22,6 +22,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="flex min-h-svh">
       <aside className="w-52 shrink-0 border-r border-border bg-sidebar flex flex-col">
+        <Link
+          href="/text-to-speech"
+          className="flex items-center gap-2 px-4 py-3 text-[12px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors border-b border-border"
+        >
+          <ArrowLeft className="size-3.5 shrink-0" />
+          Back to dashboard
+        </Link>
         <div className="flex items-center gap-2 px-4 py-4 border-b border-border">
           <BarChart3 className="size-4 text-primary" />
           <span className="text-sm font-semibold tracking-tight">Admin</span>
@@ -38,11 +45,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </Link>
           ))}
         </nav>
-        <div className="px-4 py-3 border-t border-border">
-          <Link href="/text-to-speech" className="text-[12px] text-muted-foreground hover:text-foreground transition-colors">
-            ← Back to app
-          </Link>
-        </div>
       </aside>
       <main className="flex-1 min-w-0 overflow-auto p-6">
         {children}

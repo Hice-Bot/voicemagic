@@ -1,7 +1,4 @@
-import Link from "next/link";
-import { AudioLines, BookOpen, Sparkles, Volume2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { AudioLines, Sparkles, Volume2 } from "lucide-react";
 
 export function VoicePreviewPlaceholder() {
   return (
@@ -30,12 +27,6 @@ export function VoicePreviewPlaceholder() {
           Once you generate, your audio result will appear here. Sit back and relax.
         </p>
       </div>
-      <Button variant="outline" size="sm" asChild>
-        <Link href="mailto:business@codewithantonio.com">
-          <BookOpen />
-          Don&apos;t know how?
-        </Link>
-      </Button>
     </div>
   );
 };

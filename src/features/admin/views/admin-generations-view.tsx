@@ -4,6 +4,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-q
 import { useTRPC } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Trash2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
@@ -59,7 +60,7 @@ export function AdminGenerationsView() {
             <tr className="border-b border-border bg-muted/40">
               <th className="text-left px-4 py-2.5 font-medium text-muted-foreground">Text</th>
               <th className="text-left px-4 py-2.5 font-medium text-muted-foreground">Voice</th>
-              <th className="text-left px-4 py-2.5 font-medium text-muted-foreground">User ID</th>
+              <th className="text-left px-4 py-2.5 font-medium text-muted-foreground">User</th>
               <th className="text-right px-4 py-2.5 font-medium text-muted-foreground">Date</th>
               <th className="w-10 px-4 py-2.5" />
             </tr>
@@ -81,8 +82,25 @@ export function AdminGenerationsView() {
                       {truncate(gen.text)}
                     </td>
                     <td className="px-4 py-3">{gen.voiceName}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                      {gen.orgId.slice(0, 16)}…
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Avatar className="size-6 shrink-0 rounded-md">
+                          {gen.user.imageUrl && (
+                            <AvatarImage src={gen.user.imageUrl} alt={gen.user.name} />
+                          )}
+                          <AvatarFallback className="rounded-md text-[10px]">
+                            {(gen.user.name[0] ?? "?").toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex min-w-0 flex-col leading-tight">
+                          <span className="truncate text-[13px]">{gen.user.name}</span>
+                          {gen.user.email && (
+                            <span className="truncate text-[11px] text-muted-foreground">
+                              {gen.user.email}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-right text-muted-foreground whitespace-nowrap">
                       {formatDate(gen.createdAt)}

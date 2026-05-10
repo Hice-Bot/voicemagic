@@ -17,8 +17,8 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { UserButton } from "@clerk/nextjs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useUser } from "@clerk/nextjs";
 import {
   type LucideIcon,
   Home,
@@ -27,6 +27,7 @@ import {
   Settings,
   Headphones,
   ShieldCheck,
+  LogOut,
 } from "lucide-react";
 import Link from "next/link";
 import { UsageContainer } from "@/features/billing/components/usage-container";
@@ -89,8 +90,23 @@ function NavSection({ label, items, pathname }: NavSectionProps) {
   );
 }
 
-export function DashboardSidebar() {
+export function DashboardSidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname();
+  const { user, isLoaded } = useUser();
+
+  const handleSignOut = () => {
+    // Server-side sign-out: revokes the Clerk session via backend API (avoids
+    // iOS/Safari blocking cross-origin cookies to clerk.accounts.dev).
+    window.location.href = "/api/sign-out";
+  };
+
+  const displayName =
+    user?.fullName ||
+    user?.primaryEmailAddress?.emailAddress ||
+    user?.username ||
+    "";
+  const email = user?.primaryEmailAddress?.emailAddress || "";
+  const initials = (user?.firstName?.[0] || email[0] || "?").toUpperCase();
 
   const mainMenuItems: MenuItem[] = [
     {
@@ -115,11 +131,6 @@ export function DashboardSidebar() {
       title: "Settings",
       url: "/settings",
       icon: Settings,
-    },
-    {
-      title: "Admin",
-      url: "/admin",
-      icon: ShieldCheck,
     },
     {
       title: "Help and support",
@@ -161,23 +172,54 @@ export function DashboardSidebar() {
         <UsageContainer />
         <SidebarMenu>
           <SidebarMenuItem>
-            <UserButton
-              showName
-              fallback={
-                <Skeleton className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border border-border bg-white" />
-              }
-              appearance={{
-                elements: {
-                  rootBox:
-                    "w-full! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center!",
-                  userButtonTrigger:
-                    "w-full! justify-between! bg-white! border! border-border! rounded-md! pl-1! pr-2! py-1! shadow-[0px_1px_1.5px_0px_rgba(44,54,53,0.03)]! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:p-1! group-data-[collapsible=icon]:after:hidden! [--border:color-mix(in_srgb,transparent,var(--clerk-color-neutral,#000000)_15%)]!",
-                  userButtonBox: "flex-row-reverse! gap-2!",
-                  userButtonOuterIdentifier: "text-[13px]! tracking-tight! font-medium! text-foreground! pl-0! group-data-[collapsible=icon]:hidden!",
-                  userButtonAvatarBox: "size-6!",
-                }
-              }}
-            />
+            <div className="flex items-center gap-1">
+              <SidebarMenuButton
+                asChild
+                size="lg"
+                tooltip={displayName || "Account"}
+                className="h-12 flex-1 min-w-0 px-2 py-2 data-[state=open]:bg-sidebar-accent"
+              >
+                <Link href="/account">
+                  <Avatar className="size-7 shrink-0 rounded-md">
+                    {isLoaded && user?.imageUrl && (
+                      <AvatarImage src={user.imageUrl} alt={displayName} />
+                    )}
+                    <AvatarFallback className="rounded-md text-[11px] font-medium">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex min-w-0 flex-col leading-tight">
+                    <span className="truncate text-[13px] font-medium tracking-tight">
+                      {displayName || (isLoaded ? "Signed in" : "Loading…")}
+                    </span>
+                    {email && email !== displayName && (
+                      <span className="truncate text-[11px] text-muted-foreground">
+                        {email}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              </SidebarMenuButton>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  title="Admin"
+                  className="group-data-[collapsible=icon]:hidden flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                >
+                  <ShieldCheck className="size-4" />
+                </Link>
+              )}
+            </div>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleSignOut}
+              tooltip="Sign out"
+              className="h-9 px-3 py-2 text-[13px] tracking-tight font-medium"
+            >
+              <LogOut className="size-4 shrink-0" />
+              <span>Sign out</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

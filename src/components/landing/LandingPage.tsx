@@ -217,7 +217,7 @@ function Hero() {
           <span className="hl-line hl-3">Or not.</span>
         </h1>
         <p className="hero-sub">
-          Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 20+ professional voices — ready to generate natural, expressive speech from any text.
+          Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 200 professional voices — ready to generate natural, expressive speech from any text.
         </p>
         <div className="hero-ctas">
           <a href="/sign-up" className="btn btn-primary btn-lg">
@@ -245,7 +245,7 @@ function Hero() {
 function SocialProof() {
   const stats = [
     { n: "10,247", l: "voices created" },
-    { n: "20+", l: "pro voices built-in" },
+    { n: "200", l: "pro voices built-in" },
     { n: "< 8s", l: "avg generation time" },
     { n: "4.9/5", l: "creator rating" },
   ];
@@ -345,12 +345,12 @@ function HowItWorks() {
         <div className="steps-connector" />
         {steps.map((s, i) => (
           <div key={i} className="step-card">
-            <div className="step-visual">{s.visual}</div>
             <div className="step-meta">
               <span className="step-n">{s.n}</span>
               <h3 className="step-title">{s.title}</h3>
             </div>
             <p className="step-desc">{s.desc}</p>
+            <div className="step-visual">{s.visual}</div>
           </div>
         ))}
       </div>
@@ -394,7 +394,7 @@ const IconLock = () => (
 function Features() {
   const feats = [
     { icon: <IconMic />, title: "Voice cloning", desc: "Record 10 seconds and Voicemagic creates your digital clone. Narrate videos, record podcasts, generate voiceovers — all without sitting in front of a mic.", size: "lg" },
-    { icon: <IconLibrary />, title: "20+ built-in voices", desc: "Not ready to clone your own? Choose from 20 professionally trained voices — warm narrators, energetic presenters, calm guides." },
+    { icon: <IconLibrary />, title: "200 built-in voices", desc: "Not ready to clone your own? Choose from 200 professionally trained voices — warm narrators, energetic presenters, calm guides." },
     { icon: <IconBolt />, title: "Instant generation", desc: "Paste your script. Hit generate. Audio ready in seconds — fast enough to use mid-workflow." },
     { icon: <IconDial />, title: "Fine-tune the output", desc: "Dial in creativity, pacing and expressiveness. Get consistent reads or dynamic, emotive delivery." },
     { icon: <IconGlobe />, title: "Works in your browser", desc: "No app to download. No plugins. Open voicemagic.dev, sign in, start generating." },

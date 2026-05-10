@@ -57,12 +57,13 @@ export default function RootLayout({
           borderRadius: "10px",
         },
         elements: {
-          card: "bg-[#0f0a1f] border border-white/8 shadow-2xl",
+          card: "bg-[#1a1230] border border-white/12 shadow-2xl",
           rootBox: "text-[#f5f0ff]",
           headerTitle: "text-[#f5f0ff]",
           headerSubtitle: "text-[#b0a8c5]",
-          socialButtonsBlockButton: "bg-white/5 border-white/10 text-[#f5f0ff] hover:bg-white/10",
-          formFieldInput: "bg-[#120a22] border-white/10 text-[#f5f0ff]",
+          socialButtonsBlockButton:
+            "bg-white/10 border-white/15 text-[#f5f0ff] hover:bg-white/15",
+          formFieldInput: "bg-[#221834] border-white/15 text-[#f5f0ff]",
           formButtonPrimary:
             "bg-gradient-to-b from-[oklch(0.72_0.22_350)] to-[oklch(0.58_0.24_350)]",
           footerActionLink: "text-[oklch(0.75_0.2_350)]",
