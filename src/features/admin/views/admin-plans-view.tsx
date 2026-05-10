@@ -121,7 +121,7 @@ function PlanForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1.5">
-          <Label className="text-xs">Key (unique, e.g. "free")</Label>
+          <Label className="text-xs">Key (unique, e.g. &quot;free&quot;)</Label>
           <Input value={form.key} onChange={(e) => set("key", e.target.value)} placeholder="free" className="h-8 text-sm" />
         </div>
         <div className="flex flex-col gap-1.5">

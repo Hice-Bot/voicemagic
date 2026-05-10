@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import Link from "next/link";
 
 // ── Deterministic pseudo-random ──────────────────────────────────────────────
 function seededRand(seed: number) {
@@ -190,8 +191,8 @@ function Nav() {
           <a href="#pricing">Pricing</a>
         </div>
         <div className="nav-ctas">
-          <a href="/sign-in" className="nav-signin">Sign in</a>
-          <a href="/sign-up" className="btn btn-primary btn-sm">Start for free</a>
+          <Link href="/sign-in" className="nav-signin">Sign in</Link>
+          <Link href="/sign-up" className="btn btn-primary btn-sm">Start for free</Link>
         </div>
       </div>
     </nav>
@@ -220,10 +221,10 @@ function Hero() {
           Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 200 professional voices — ready to generate natural, expressive speech from any text.
         </p>
         <div className="hero-ctas">
-          <a href="/sign-up" className="btn btn-primary btn-lg">
+          <Link href="/sign-up" className="btn btn-primary btn-lg">
             Clone Your Voice Free
             <span className="btn-arrow">→</span>
-          </a>
+          </Link>
           <a href="#voices" className="btn btn-ghost btn-lg">
             <span className="play-glyph">▶</span>
             Watch demo · 90s
@@ -456,17 +457,38 @@ function PauseIcon() {
 
 function VoiceCard({ voice, playing, onToggle }: { voice: typeof VOICES[0]; playing: boolean; onToggle: () => void }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const onToggleRef = useRef(onToggle);
 
   useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(`/api/v1/audio/${voice.genId}`);
-      audioRef.current.addEventListener("ended", onToggle);
+    onToggleRef.current = onToggle;
+  }, [onToggle]);
+
+  useEffect(() => {
+    const audio = new Audio(`/api/v1/audio/${voice.genId}`);
+    audioRef.current = audio;
+    const handleEnded = () => onToggleRef.current();
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener("ended", handleEnded);
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+    };
+  }, [voice.genId]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) {
+      return;
     }
+
     if (playing) {
-      audioRef.current.play().catch(() => {});
+      audio.play().catch(() => {});
     } else {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      audio.pause();
+      audio.currentTime = 0;
     }
   }, [playing]);
 
@@ -515,7 +537,7 @@ function VoiceShowcase() {
       </div>
       <div className="showcase-foot">
         <div className="foot-note">All 20 voices available on the free tier.</div>
-        <a href="/sign-up" className="foot-link">Browse the full library →</a>
+        <Link href="/sign-up" className="foot-link">Browse the full library →</Link>
       </div>
     </section>
   );
@@ -683,8 +705,8 @@ function ApiSection() {
           </div>
         </div>
         <div className="api-foot">
-          <a href="/docs" className="btn btn-ghost btn-lg">Read the docs →</a>
-          <a href="/sign-up" className="btn btn-primary btn-lg">Get an API key</a>
+          <Link href="/docs" className="btn btn-ghost btn-lg">Read the docs →</Link>
+          <Link href="/sign-up" className="btn btn-primary btn-lg">Get an API key</Link>
         </div>
       </div>
     </section>
@@ -706,12 +728,12 @@ function FinalCTA() {
         </h2>
         <p className="fcta-sub">Sign up free. Clone your first voice in under a minute. No credit card required.</p>
         <div className="fcta-ctas">
-          <a href="/sign-up" className="btn btn-primary btn-xl">
+          <Link href="/sign-up" className="btn btn-primary btn-xl">
             Get Started Free
             <span className="btn-arrow">→</span>
-          </a>
+          </Link>
         </div>
-        <div className="fcta-below">Already have an account? <a href="/sign-in" className="fcta-signin">Sign in</a></div>
+        <div className="fcta-below">Already have an account? <Link href="/sign-in" className="fcta-signin">Sign in</Link></div>
       </div>
     </section>
   );
@@ -736,8 +758,8 @@ function Footer() {
           </div>
           <div className="foot-col">
             <div className="foot-head">Developers</div>
-            <a href="/docs">Documentation</a>
-            <a href="/docs">API reference</a>
+            <Link href="/docs">Documentation</Link>
+            <Link href="/docs">API reference</Link>
             <a href="#">Status</a>
           </div>
           <div className="foot-col">

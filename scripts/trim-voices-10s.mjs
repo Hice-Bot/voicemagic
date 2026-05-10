@@ -5,10 +5,8 @@ import path from "path";
 import { execSync } from "child_process";
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import pg from "pg";
-import { fileURLToPath } from "url";
 import os from "os";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { Pool } = pg;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 

@@ -1,4 +1,6 @@
-const { Client } = require("pg");
+import pg from "pg";
+
+const { Client } = pg;
 const c = new Client({ connectionString: process.env.DATABASE_URL });
 c.connect().then(async () => {
   const orgs = await c.query('SELECT DISTINCT "orgId" FROM "Generation" LIMIT 1');

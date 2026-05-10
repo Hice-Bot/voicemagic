@@ -15,6 +15,23 @@ const planInputSchema = z.object({
   sortOrder: z.number().int(),
 });
 
+type PolarListResponse<T> = {
+  items?: T[];
+  result?: {
+    items?: T[];
+  };
+};
+
+type PolarOrder = {
+  netAmount?: number;
+  amount?: number;
+  createdAt: string | Date;
+};
+
+type PolarSubscription = {
+  status: string;
+};
+
 export const adminRouter = createTRPCRouter({
   getOverview: adminProcedure.query(async () => {
     const clerk = await clerkClient();
@@ -39,16 +56,13 @@ export const adminRouter = createTRPCRouter({
     let activeSubscriptions = 0;
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const [ordersRes, subsRes] = await Promise.all([
-        polar.orders.list({ limit: 100 }) as Promise<any>,
-        polar.subscriptions.list({ limit: 100 }) as Promise<any>,
+        polar.orders.list({ limit: 100 }) as Promise<PolarListResponse<PolarOrder>>,
+        polar.subscriptions.list({ limit: 100 }) as Promise<PolarListResponse<PolarSubscription>>,
       ]);
 
-      const orders: Array<{ netAmount?: number; amount?: number; createdAt: string | Date }> =
-        ordersRes?.items ?? ordersRes?.result?.items ?? [];
-      const subs: Array<{ status: string }> =
-        subsRes?.items ?? subsRes?.result?.items ?? [];
+      const orders = ordersRes.items ?? ordersRes.result?.items ?? [];
+      const subs = subsRes.items ?? subsRes.result?.items ?? [];
 
       activeSubscriptions = subs.filter((s) => s.status === "active").length;
 
