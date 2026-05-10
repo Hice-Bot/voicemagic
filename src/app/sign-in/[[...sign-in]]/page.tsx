@@ -1,5 +1,18 @@
-import { redirect } from "next/navigation";
+import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
-  redirect("https://strong-frog-15.clerk.accounts.dev/sign-in");
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <SignIn
+        signUpUrl="/sign-up"
+        fallbackRedirectUrl="/text-to-speech"
+        appearance={{
+          elements: {
+            rootBox: "mx-auto",
+            card: "shadow-lg",
+          },
+        }}
+      />
+    </div>
+  );
 }
