@@ -57,12 +57,18 @@ export default function RootLayout({
           borderRadius: "10px",
         },
         elements: {
-          card: "bg-[#1a1230] border border-white/12 shadow-2xl",
+          card: "bg-[#241637] border border-white/15 shadow-2xl",
           rootBox: "text-[#f5f0ff]",
           headerTitle: "text-[#f5f0ff]",
           headerSubtitle: "text-[#b0a8c5]",
           socialButtonsBlockButton:
-            "bg-white/10 border-white/15 text-[#f5f0ff] hover:bg-white/15",
+            "bg-[#f7f1ff] border-white/70 text-[#12081f] hover:bg-white shadow-sm",
+          socialButtonsBlockButtonText: "text-[#12081f] font-medium",
+          socialButtonsProviderIcon: "text-[#12081f]",
+          alternativeMethodsBlockButton:
+            "bg-[#f7f1ff] border-white/70 text-[#12081f] hover:bg-white",
+          modalCloseButton:
+            "bg-[#f7f1ff] text-[#12081f] hover:bg-white border border-white/50 shadow-sm",
           formFieldInput: "bg-[#221834] border-white/15 text-[#f5f0ff]",
           formButtonPrimary:
             "bg-gradient-to-b from-[oklch(0.72_0.22_350)] to-[oklch(0.58_0.24_350)]",
