@@ -218,7 +218,7 @@ function Hero() {
           <span className="hl-line hl-3">Or not.</span>
         </h1>
         <p className="hero-sub">
-          Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 200 professional voices — ready to generate natural, expressive speech from any text.
+          Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 200+ professional voices — ready to generate natural, expressive speech from any text.
         </p>
         <div className="hero-ctas">
           <Link href="/pricing" className="btn btn-primary btn-lg">
@@ -236,36 +236,6 @@ function Hero() {
           <span>Works in your browser</span>
           <span className="dot-sep">·</span>
           <span>Ready in under a minute</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ── Social Proof ─────────────────────────────────────────────────────────────
-function SocialProof() {
-  const stats = [
-    { n: "10,247", l: "voices created" },
-    { n: "200", l: "pro voices built-in" },
-    { n: "< 8s", l: "avg generation time" },
-    { n: "4.9/5", l: "creator rating" },
-  ];
-  return (
-    <section className="proof">
-      <div className="proof-inner">
-        <div className="proof-label">Trusted by builders, creators and studios</div>
-        <div className="proof-stats">
-          {stats.map((s, i) => (
-            <div key={i} className="proof-stat">
-              <div className="proof-n">{s.n}</div>
-              <div className="proof-l">{s.l}</div>
-            </div>
-          ))}
-        </div>
-        <div className="proof-logos">
-          {["PODWAVE", "INDIE FM", "NOMAD STUDIO", "Lighthouse", "tapestry.", "KINETIC LABS"].map((n, i) => (
-            <span key={i} className="proof-logo">{n}</span>
-          ))}
         </div>
       </div>
     </section>
@@ -395,7 +365,7 @@ const IconLock = () => (
 function Features() {
   const feats = [
     { icon: <IconMic />, title: "Voice cloning", desc: "Record 10 seconds and Voicemagic creates your digital clone. Narrate videos, record podcasts, generate voiceovers — all without sitting in front of a mic.", size: "lg" },
-    { icon: <IconLibrary />, title: "200 built-in voices", desc: "Not ready to clone your own? Choose from 200 professionally trained voices — warm narrators, energetic presenters, calm guides." },
+    { icon: <IconLibrary />, title: "200+ built-in voices", desc: "Not ready to clone your own? Choose from 200+ professionally trained voices — warm narrators, energetic presenters, calm guides." },
     { icon: <IconBolt />, title: "Instant generation", desc: "Paste your script. Hit generate. Audio ready in seconds — fast enough to use mid-workflow." },
     { icon: <IconDial />, title: "Fine-tune the output", desc: "Dial in creativity, pacing and expressiveness. Get consistent reads or dynamic, emotive delivery." },
     { icon: <IconGlobe />, title: "Works in your browser", desc: "No app to download. No plugins. Open voicemagic.dev, sign in, start generating." },
@@ -536,8 +506,8 @@ function VoiceShowcase() {
         ))}
       </div>
       <div className="showcase-foot">
-        <div className="foot-note">All 20 voices available on the free tier.</div>
-        <Link href="/sign-up" className="foot-link">Browse the full library →</Link>
+        <div className="foot-note">All 200+ voices available on the free tier.</div>
+        <Link href="/pricing" className="foot-link">Browse the full library →</Link>
       </div>
     </section>
   );
@@ -590,7 +560,7 @@ const PRICING_PLANS = [
     cta: "Start free",
     href: "/sign-up",
     features: [
-      "200 built-in voices",
+      "200+ built-in voices",
       "10k monthly generation credits",
       "1 custom voice clone",
       "WAV downloads",
@@ -920,7 +890,6 @@ export function LandingPage() {
     <div className="vm-page">
       <Nav />
       <Hero />
-      <SocialProof />
       <HowItWorks />
       <Features />
       <VoiceShowcase />
