@@ -411,11 +411,11 @@ function Features() {
 
 // ── Voice Showcase ────────────────────────────────────────────────────────────
 const VOICES = [
-  { name: "Aaron Vale", category: "Narrative", duration: "0:24", hue: 275, genId: "cmo83lrdt000001s543t3fgxd", transcript: "In 1969, a single line of code changed everything we thought we knew about computation." },
-  { name: "Zoe Chen", category: "Conversational", duration: "0:18", hue: 310, genId: "cmo83m4je000401s53fx160f0", transcript: "Okay so here's the thing — most people get this completely backwards, and I used to too." },
-  { name: "Marcus Reed", category: "Documentary", duration: "0:31", hue: 245, genId: "cmo83lxfw000201s5txr94h2r", transcript: "Beneath the Atlantic, at depths where sunlight has never reached, life has found a way." },
-  { name: "Ines Park", category: "Energetic", duration: "0:15", hue: 340, genId: "cmo83m1at000301s5j9p3mfa6", transcript: "Let's GO. Today we're building something that I genuinely, seriously cannot wait to show you." },
-  { name: "Theo Brooks", category: "Calm Guide", duration: "0:28", hue: 200, genId: "cmo83luiu000101s5gcerml0d", transcript: "Close your eyes. Take a breath in through your nose, and let it out slowly. You're safe here." },
+  { name: "Aaron", category: "Narrative", duration: "0:24", hue: 275, genId: "cmo83lrdt000001s543t3fgxd", transcript: "In 1969, a single line of code changed everything we thought we knew about computation." },
+  { name: "Zoe", category: "Conversational", duration: "0:18", hue: 310, genId: "cmo83m4je000401s53fx160f0", transcript: "Okay so here's the thing — most people get this completely backwards, and I used to too." },
+  { name: "Marcus", category: "Documentary", duration: "0:31", hue: 245, genId: "cmo83lxfw000201s5txr94h2r", transcript: "Beneath the Atlantic, at depths where sunlight has never reached, life has found a way." },
+  { name: "Ines", category: "Energetic", duration: "0:15", hue: 340, genId: "cmo83m1at000301s5j9p3mfa6", transcript: "Let's GO. Today we're building something that I genuinely, seriously cannot wait to show you." },
+  { name: "Theo", category: "Calm Guide", duration: "0:28", hue: 200, genId: "cmo83luiu000101s5gcerml0d", transcript: "Close your eyes. Take a breath in through your nose, and let it out slowly. You're safe here." },
 ];
 
 function PlayIcon() {

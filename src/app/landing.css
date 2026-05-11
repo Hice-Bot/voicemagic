@@ -596,6 +596,11 @@
 .showcase { padding: 100px var(--pad); max-width: var(--max); margin: 0 auto; }
 .voice-grid { display: grid; gap: 16px; }
 .showcase-lg .voice-grid { grid-template-columns: repeat(2, 1fr); }
+.showcase-lg .voice-grid .vcard:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(100%, calc((100% - 16px) / 2));
+}
 .showcase-sm .voice-grid { grid-template-columns: repeat(3, 1fr); }
 .vcard {
   position: relative;
@@ -1089,6 +1094,10 @@
   .feat-card-lg .feat-icon { grid-row: auto; }
   .uc-grid { grid-template-columns: 1fr; }
   .showcase-lg .voice-grid, .showcase-sm .voice-grid { grid-template-columns: 1fr; }
+  .showcase-lg .voice-grid .vcard:last-child:nth-child(odd) {
+    grid-column: auto;
+    width: 100%;
+  }
   .pricing-grid { grid-template-columns: 1fr; }
   .price-card-featured { transform: none; }
   .price-top { flex-direction: column; }
