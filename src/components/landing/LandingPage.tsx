@@ -870,9 +870,9 @@ function Footer() {
           </div>
           <div className="foot-col">
             <div className="foot-head">Legal</div>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Acceptable use</a>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/acceptable-use">Acceptable use</Link>
           </div>
         </div>
       </div>
