@@ -854,19 +854,16 @@ function Footer() {
             <a href="#features">Features</a>
             <a href="#voices">Voices</a>
             <Link href="/pricing">Pricing</Link>
-            <a href="#">Changelog</a>
           </div>
           <div className="foot-col">
             <div className="foot-head">Developers</div>
             <Link href="/docs">Documentation</Link>
             <Link href="/docs">API reference</Link>
-            <a href="#">Status</a>
           </div>
           <div className="foot-col">
             <div className="foot-head">Company</div>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <a href="#">Careers</a>
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
           </div>
           <div className="foot-col">
             <div className="foot-head">Legal</div>
