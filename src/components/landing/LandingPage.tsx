@@ -562,6 +562,7 @@ const PRICING_PLANS = [
     features: [
       "200+ built-in voices",
       "10k monthly generation credits",
+      "Web, API, and MCP use the same credits",
       "1 custom voice clone",
       "WAV downloads",
       "Browser recording",
@@ -582,6 +583,7 @@ const PRICING_PLANS = [
     features: [
       "Everything in Free",
       "250k monthly generation credits",
+      "Web, API, and MCP use the same credits",
       "10 custom voice clones",
       "Priority generation queue",
       "Commercial usage",
@@ -602,6 +604,7 @@ const PRICING_PLANS = [
     features: [
       "Everything in Standard",
       "1M monthly generation credits",
+      "Web, API, and MCP use the same credits",
       "50 custom voice clones",
       "API access",
       "Early feature access",
@@ -622,6 +625,10 @@ export function PricingSection() {
           We run Voicemagic lean, so pricing is based on practical usage instead
           of scary AI-token math. Start free, then upgrade when you need more room.
         </p>
+        <div className="pricing-shared-note">
+          One simple credit pool covers everything: web app generations, REST API
+          requests, and MCP agent usage all draw from the same monthly credits.
+        </div>
       </div>
 
       <div className="pricing-grid">
