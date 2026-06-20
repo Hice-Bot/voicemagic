@@ -188,11 +188,11 @@ function Nav() {
           <a href="#features">Features</a>
           <a href="#voices">Voices</a>
           <a href="#api">API</a>
-          <Link href="/pricing">Pricing</Link>
+          <Link href="https://voicemagic.dev/pricing">Pricing</Link>
         </div>
         <div className="nav-ctas">
           <Link href="/sign-in" className="nav-signin">Sign in</Link>
-          <Link href="/pricing" className="btn btn-primary btn-sm">Start for free</Link>
+          <Link href="https://voicemagic.dev/pricing" className="btn btn-primary btn-sm">Start for free</Link>
         </div>
       </div>
     </nav>
@@ -221,7 +221,7 @@ function Hero() {
           Voicemagic turns a 10-second recording into a voice you can use forever. Or skip the cloning entirely and pick from 200+ professional voices — ready to generate natural, expressive speech from any text.
         </p>
         <div className="hero-ctas">
-          <Link href="/pricing" className="btn btn-primary btn-lg">
+          <Link href="https://voicemagic.dev/pricing" className="btn btn-primary btn-lg">
             Clone Any Voice Free
             <span className="btn-arrow">→</span>
           </Link>
@@ -411,11 +411,11 @@ function Features() {
 
 // ── Voice Showcase ────────────────────────────────────────────────────────────
 const VOICES = [
-  { name: "Aaron", category: "Narrative", duration: "0:24", hue: 275, genId: "cmo83lrdt000001s543t3fgxd", transcript: "In 1969, a single line of code changed everything we thought we knew about computation." },
-  { name: "Zoe", category: "Conversational", duration: "0:18", hue: 310, genId: "cmo83m4je000401s53fx160f0", transcript: "Okay so here's the thing — most people get this completely backwards, and I used to too." },
-  { name: "Marcus", category: "Documentary", duration: "0:31", hue: 245, genId: "cmo83lxfw000201s5txr94h2r", transcript: "Beneath the Atlantic, at depths where sunlight has never reached, life has found a way." },
-  { name: "Ines", category: "Energetic", duration: "0:15", hue: 340, genId: "cmo83m1at000301s5j9p3mfa6", transcript: "Let's GO. Today we're building something that I genuinely, seriously cannot wait to show you." },
-  { name: "Theo", category: "Calm Guide", duration: "0:28", hue: 200, genId: "cmo83luiu000101s5gcerml0d", transcript: "Close your eyes. Take a breath in through your nose, and let it out slowly. You're safe here." },
+  { name: "Esther", category: "Conversational", duration: "0:05", hue: 275, genId: "cmp0cwocq000001qocmec4r8u", transcript: "Testing Esther. This is Esther here." },
+  { name: "Adrian", category: "Narrative", duration: "0:03", hue: 310, genId: "cmp0bgezm000101quoo5wn67a", transcript: "Testing one, two, three." },
+  { name: "Andrew", category: "Documentary", duration: "0:04", hue: 245, genId: "cmp0bdzv2000001qui6p8vcsz", transcript: "Testing hello hello." },
+  { name: "Adam", category: "Character", duration: "0:06", hue: 340, genId: "cmonm2kqm000001qh6gkwvxdm", transcript: "Yee haw! Be a lot cooler if ya did..." },
+  { name: "Jeff", category: "Energetic", duration: "0:06", hue: 200, genId: "cmoalvtuz000401nxlb51ibqa", transcript: "Welcome to the jungle! We got fun and games!" },
 ];
 
 function PlayIcon() {
@@ -435,6 +435,7 @@ function VoiceCard({ voice, playing, onToggle }: { voice: typeof VOICES[0]; play
 
   useEffect(() => {
     const audio = new Audio(`/api/v1/audio/${voice.genId}`);
+    audio.preload = "metadata";
     audioRef.current = audio;
     const handleEnded = () => onToggleRef.current();
     audio.addEventListener("ended", handleEnded);
@@ -507,7 +508,7 @@ function VoiceShowcase() {
       </div>
       <div className="showcase-foot">
         <div className="foot-note">All 200+ voices available on the free tier.</div>
-        <Link href="/pricing" className="foot-link">Browse the full library →</Link>
+        <Link href="https://voicemagic.dev/pricing" className="foot-link">Browse the full library →</Link>
       </div>
     </section>
   );
@@ -835,7 +836,7 @@ function FinalCTA() {
         </h2>
         <p className="fcta-sub">Sign up free. Clone your first voice in under a minute. No credit card required.</p>
         <div className="fcta-ctas">
-          <Link href="/pricing" className="btn btn-primary btn-xl">
+          <Link href="https://voicemagic.dev/pricing" className="btn btn-primary btn-xl">
             Get Started Free
             <span className="btn-arrow">→</span>
           </Link>
@@ -860,7 +861,7 @@ function Footer() {
             <div className="foot-head">Product</div>
             <a href="#features">Features</a>
             <a href="#voices">Voices</a>
-            <Link href="/pricing">Pricing</Link>
+            <Link href="https://voicemagic.dev/pricing">Pricing</Link>
           </div>
           <div className="foot-col">
             <div className="foot-head">Developers</div>

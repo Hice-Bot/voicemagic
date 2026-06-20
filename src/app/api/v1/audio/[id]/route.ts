@@ -4,11 +4,11 @@ import { authenticateApiRequest } from "@/lib/api-auth";
 
 // Public demo generation IDs used on the landing page voice showcase
 const DEMO_IDS = new Set([
-  "cmo83lrdt000001s543t3fgxd",
-  "cmo83m4je000401s53fx160f0",
-  "cmo83lxfw000201s5txr94h2r",
-  "cmo83m1at000301s5j9p3mfa6",
-  "cmo83luiu000101s5gcerml0d",
+  "cmp0cwocq000001qocmec4r8u",
+  "cmp0bgezm000101quoo5wn67a",
+  "cmp0bdzv2000001qui6p8vcsz",
+  "cmonm2kqm000001qh6gkwvxdm",
+  "cmoalvtuz000401nxlb51ibqa",
 ]);
 
 export async function GET(
