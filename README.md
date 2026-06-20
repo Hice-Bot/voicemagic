@@ -18,9 +18,7 @@
 <br />
 
 <p>
-  <a href="https://cwa.run/clerk"><img src="https://img.shields.io/badge/Clerk-6C47FF?style=for-the-badge&logo=clerk&logoColor=white" alt="Clerk" /></a>&nbsp;
-  <a href="https://cwa.run/polar"><img src="https://img.shields.io/badge/Polar-000000?style=for-the-badge&logo=polar&logoColor=white" alt="Polar" /></a>&nbsp;
-  <a href="https://cwa.run/railway"><img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway" /></a>&nbsp;
+  <a href="https://cwa.run/clerk"><img src="https://img.shields.io/badge/Clerk-6C47FF?style=for-the-badge&logo=clerk&logoColor=white" alt="Clerk" /></a>&nbsp;  <a href="https://cwa.run/railway"><img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway" /></a>&nbsp;
   <a href="https://cwa.run/sentry"><img src="https://img.shields.io/badge/Sentry-362D59?style=for-the-badge&logo=sentry&logoColor=white" alt="Sentry" /></a>&nbsp;
   <a href="https://cwa.run/coderabbit"><img src="https://img.shields.io/badge/CodeRabbit-FF6C37?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="CodeRabbit" /></a>&nbsp;
   <a href="https://cwa.run/prisma"><img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" /></a>
@@ -62,7 +60,7 @@ git checkout 04-backend-infrastructure  # example: jump to Chapter 4
 - **20 Built-in Voices**  - Pre-seeded system voices across 12 categories and 5 locales
 - **Waveform Audio Player**  - WaveSurfer.js visualization with seek, play/pause, and download
 - **Multi-Tenant**  - Team-based access via Clerk Organizations with full data isolation
-- **Usage-Based Billing**  - Pay-as-you-go character metering with configurable pricing via Polar products and meters
+- **Shared Credit Billing**  - Clerk Billing plans with one shared credit base for web, API, and MCP usage
 - **Generation History**  - Browse and replay past generations with preserved voice metadata
 - **Fully Responsive**  - Mobile-first with bottom drawers, compact controls, and adaptive layouts
 
@@ -75,7 +73,7 @@ git checkout 04-backend-infrastructure  # example: jump to Chapter 4
 - [Clerk](https://cwa.run/clerk) account (with Organizations enabled)
 - [Cloudflare R2](https://cwa.run/cloudflare-r2) bucket
 - [Modal](https://cwa.run/modal) account (for GPU-hosted TTS)
-- [Polar](https://cwa.run/polar) account (for billing)
+- [Clerk Billing](https://clerk.com/docs/guides/billing/overview) enabled on your Clerk instance
 
 ### 1. Clone and install
 
@@ -91,35 +89,34 @@ npm install
 cp .env.example .env
 ```
 
-Fill in the blank values in `.env`. Sensible defaults (Clerk routes, Polar meter names, `APP_URL`, etc.) are pre-filled.
+Fill in the blank values in `.env`. Sensible defaults for Clerk routes, billing simulation, and `APP_URL` are pre-filled.
 
-### 3. Set up Polar billing
+### 3. Set up Clerk Billing
 
-In your [Polar](https://cwa.run/polar) dashboard, create two **meters** under **Meters**:
+Create three user plans in your Clerk Billing dashboard:
 
-1. **Voice Creation** meter
-   - Filter: Name equals `voice_creation`
-   - Aggregation: **Count**
+1. **Free**
+   - Slug: `free`
+   - No credit card required
 
-2. **Text-to-Speech Characters** meter
-   - Filter: Name equals `tts_generation`
-   - Aggregation: **Sum** over `characters`
+2. **Standard**
+   - Slug: `standard`
+   - Recommended everyday plan
 
-Then create a new **product** with **Recurring subscription** pricing. Under **Price Type**, add two metered prices:
+3. **Pro**
+   - Slug: `pro`
+   - Higher-volume plan
 
-1. Click **Add metered price** and select the **Text-to-Speech Characters** meter
-   - Set the **Amount per unit** (price per character, e.g. `$0.003`)
-   - Optionally set a **Cap amount** (e.g. `$100`)
+The app checks Clerk plan slugs with `auth().has({ plan })` and presents Clerk's native pricing table at `/pricing`. Web usage, public API usage, and MCP usage all draw from the same app-managed credit base.
 
-2. Click **Add metered price** again and select the **Voice Creation** meter
-   - Set the **Amount per unit** (price per voice generation, e.g. `$0.25`)
-   - Optionally set a **Cap amount** (e.g. `$100`)
+For local or development testing without real payments, set:
 
-With only metered prices, the subscription starts at **$0/month** and scales with usage. If you want a baseline subscription fee (e.g. $20/month), add a third price to the same product — select a **fixed price** instead of a metered price. This requires no code changes since fixed prices are handled entirely by Polar.
+```env
+CLERK_BILLING_SIMULATION=true
+CLERK_BILLING_SIMULATED_PLAN=standard
+```
 
-Ensure **Allow multiple subscriptions** is turned **off** under **Settings > Billing** (this is the Polar default).
-
-Copy the product ID into `POLAR_PRODUCT_ID`. The meter filter names and aggregation property must match the `POLAR_METER_*` env variables.
+When simulation is enabled, `/pricing` shows test plan buttons that set a temporary simulated plan cookie for the signed-in user.
 
 ### 4. Set up the database
 
@@ -186,7 +183,7 @@ Resonance is designed to be self-hosted. You'll need:
 2. **Cloudflare R2**  - For audio storage (S3-compatible, generous free tier)
 3. **Modal**  - For serverless GPU inference (pay-per-second billing)
 4. **Clerk**  - For authentication and multi-tenancy
-5. **Polar**  - For metered billing (use sandbox mode with card `4242 4242 4242 4242` for testing)
+5. **Clerk Billing**  - For subscription plans and development payment simulation
 
 Deploy the Next.js app to any Node.js host (Railway, Docker, etc.).
 
@@ -206,7 +203,7 @@ src/
 │   ├── voices/                 # Voice library, creation, recording
 │   └── billing/                # Usage display, checkout
 ├── hooks/                      # App-wide hooks
-├── lib/                        # Core: db, r2, polar, env, chatterbox client
+??? lib/                        # Core: db, r2, env, chatterbox client
 ├── trpc/                       # tRPC routers, client, server helpers
 ├── generated/                  # Prisma client
 └── types/                      # Generated API types
