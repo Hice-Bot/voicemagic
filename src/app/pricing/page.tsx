@@ -1,7 +1,120 @@
+import { PricingTable } from "@clerk/nextjs";
 import Link from "next/link";
 
-import { PricingSection } from "@/components/landing/LandingPage";
 import "../landing.css";
+
+const SIMULATED_PLANS = [
+  {
+    key: "free",
+    eyebrow: "No card required",
+    name: "Free",
+    price: "$0",
+    cadence: "forever",
+    description: "A starter credit pool for trying web generation, API calls, and MCP agent workflows.",
+    features: ["Shared credits across web + API/MCP", "Built-in voices", "Good for testing the flow"],
+  },
+  {
+    key: "standard",
+    eyebrow: "Recommended",
+    name: "Standard",
+    price: "$19",
+    cadence: "month",
+    description: "The practical tier for regular creator work and lightweight agent automation.",
+    features: ["Larger shared credit pool", "Voice cloning", "API and MCP access included"],
+    highlighted: true,
+  },
+  {
+    key: "pro",
+    eyebrow: "Higher volume",
+    name: "Pro",
+    price: "$49",
+    cadence: "month",
+    description: "More room for production workloads, automations, and heavier web/API usage.",
+    features: ["Largest shared credit pool", "Priority production workflows", "API and MCP access included"],
+  },
+];
+
+function isBillingSimulationEnabled() {
+  return process.env.CLERK_BILLING_SIMULATION === "true" || process.env.CLERK_BILLING_SIMULATION === "1";
+}
+
+function SimulatedPricingTable() {
+  return (
+    <section className="pricing-sec">
+      <div className="pricing-orbit pricing-orbit-1" />
+      <div className="pricing-orbit pricing-orbit-2" />
+      <div className="section-head pricing-head">
+        <div className="section-kicker">Simulated Clerk checkout</div>
+        <h1 className="section-h2">Choose a test plan.</h1>
+        <p className="section-sub">
+          Development billing simulation is enabled. These buttons do not charge a card; they set your test plan so
+          web usage, API usage, and MCP usage all draw from the same simulated credit base.
+        </p>
+      </div>
+
+      <div className="pricing-grid">
+        {SIMULATED_PLANS.map((plan) => (
+          <article
+            key={plan.key}
+            className={`price-card${plan.highlighted ? " price-card-featured" : ""}`}
+          >
+            {plan.highlighted && <div className="price-ribbon">Recommended</div>}
+            <div className="price-topline">
+              <div>
+                <div className="price-eyebrow">{plan.eyebrow}</div>
+                <h2 className="price-name">{plan.name}</h2>
+              </div>
+              <div className="price-chip">Shared credits</div>
+            </div>
+            <div className="price-amount">
+              <span className="price-value">{plan.price}</span>
+              <span className="price-cadence">/{plan.cadence}</span>
+            </div>
+            <p className="price-desc">{plan.description}</p>
+            <form action="/api/billing/simulate" method="post">
+              <input type="hidden" name="plan" value={plan.key} />
+              <button
+                className={`price-cta${plan.highlighted ? " price-cta-primary" : ""}`}
+                type="submit"
+              >
+                Simulate {plan.name}
+              </button>
+            </form>
+            <ul className="price-features">
+              {plan.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ClerkPricingSection() {
+  return (
+    <section className="pricing-sec">
+      <div className="pricing-orbit pricing-orbit-1" />
+      <div className="pricing-orbit pricing-orbit-2" />
+      <div className="section-head pricing-head">
+        <div className="section-kicker">Clerk Billing</div>
+        <h1 className="section-h2">Simple credits. One balance.</h1>
+        <p className="section-sub">
+          Pick a plan in Clerk Billing. Web usage, API calls, and MCP agent usage all draw from the same credit base,
+          so there is one plan and one pool to understand.
+        </p>
+      </div>
+      <div className="mx-auto max-w-6xl px-6 pb-24">
+        <PricingTable
+          for="user"
+          highlightedPlan="standard"
+          newSubscriptionRedirectUrl="/text-to-speech"
+        />
+      </div>
+    </section>
+  );
+}
 
 export default function PricingPage() {
   return (
@@ -32,7 +145,7 @@ export default function PricingPage() {
         </div>
       </nav>
 
-      <PricingSection />
+      {isBillingSimulationEnabled() ? <SimulatedPricingTable /> : <ClerkPricingSection />}
     </main>
   );
 }

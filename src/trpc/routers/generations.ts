@@ -1,7 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
-import { polar } from "@/lib/polar";
-import { env } from "@/lib/env";
 import { TRPCError } from "@trpc/server";
 import { chatterbox } from "@/lib/chatterbox-client";
 import { prisma } from "@/lib/db";
@@ -185,22 +183,6 @@ export const generationsRouter = createTRPCRouter({
           message: "Failed to store generated audio",
         });
       }
-
-      // Ingest usage event to Polar (fire-and-forget, don't block response)
-      polar.events
-        .ingest({
-          events: [
-            {
-              name: env.POLAR_METER_TTS_GENERATION,
-              externalCustomerId: ctx.orgId,
-              metadata: { [env.POLAR_METER_TTS_PROPERTY]: input.text.length },
-              timestamp: new Date(),
-            },
-          ],
-        })
-        .catch(() => {
-          // Silently fail - don't break the user experience for metering errors
-        });
 
       return {
         id: generationId,

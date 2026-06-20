@@ -41,9 +41,6 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.15.0
         version: 1.29.0(zod@4.3.6)
-      '@polar-sh/sdk':
-        specifier: ^0.45.0
-        version: 0.45.2
       '@prisma/adapter-pg':
         specifier: ^7.4.1
         version: 7.8.0
@@ -1641,9 +1638,6 @@ packages:
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
-
-  '@polar-sh/sdk@0.45.2':
-    resolution: {integrity: sha512-gkWYBLz3DzvKUoKOezODfbicNA2HAL7jCe2/s4HVEcJO6fHPHLEk9wXg6uCnW81T0RMqTMkL5qrRBbwsb/tROg==}
 
   '@prisma/adapter-pg@7.8.0':
     resolution: {integrity: sha512-ygb3UkerK3v8MDpXVgCISdRNDozpxh6+JVJgiIGbSr5KBgz10LLf5ejUskPGoXlsIjxsOu6nuy1JVQr2EKGSlg==}
@@ -8139,11 +8133,6 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.7.0(@opentelemetry/api@1.9.1)
-
-  '@polar-sh/sdk@0.45.2':
-    dependencies:
-      standardwebhooks: 1.0.0
-      zod: 4.3.6
 
   '@prisma/adapter-pg@7.8.0':
     dependencies:

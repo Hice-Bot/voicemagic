@@ -1,20 +1,13 @@
-import { useCallback } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useTRPC } from "@/trpc/client";
+import { useCallback, useTransition } from "react";
 
 export function useCheckout() {
-  const trpc = useTRPC();
-  const mutation = useMutation(
-    trpc.billing.createCheckout.mutationOptions({})
-  );
+  const [isPending, startTransition] = useTransition();
 
-    const checkout = useCallback(() => {
-    mutation.mutate(undefined, {
-      onSuccess: (data) => {
-        window.location.href = data.checkoutUrl;
-      },
+  const checkout = useCallback(() => {
+    startTransition(() => {
+      window.location.href = "/pricing";
     });
-  }, [mutation]);
+  }, []);
 
-  return { checkout, isPending: mutation.isPending };
-};
+  return { checkout, isPending };
+}

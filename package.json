@@ -21,7 +21,6 @@
     "@dicebear/core": "^9.3.2",
     "@hookform/resolvers": "^5.2.2",
     "@modelcontextprotocol/sdk": "^1.15.0",
-    "@polar-sh/sdk": "^0.45.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@sentry/nextjs": "^10.40.0",

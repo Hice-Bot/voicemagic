@@ -1,70 +1,69 @@
-import { TRPCError } from "@trpc/server";
-import { polar } from "@/lib/polar";
+import { auth } from "@clerk/nextjs/server";
+import { cookies } from "next/headers";
 import { env } from "@/lib/env";
 import { createTRPCRouter, orgProcedure } from "../init";
 
+const PLAN_LABELS = {
+  free: "Free",
+  standard: "Standard",
+  pro: "Pro",
+} as const;
+
+type PlanKey = keyof typeof PLAN_LABELS;
+
+function isBillingSimulationEnabled() {
+  return env.CLERK_BILLING_SIMULATION === "true" || env.CLERK_BILLING_SIMULATION === "1";
+}
+
+function normalizePlan(plan: string | undefined): PlanKey | null {
+  if (plan === "free" || plan === "standard" || plan === "pro") {
+    return plan;
+  }
+
+  return null;
+}
+
+async function getSimulatedPlan(): Promise<PlanKey> {
+  const cookieStore = await cookies();
+  const cookiePlan = normalizePlan(cookieStore.get("vm_simulated_plan")?.value);
+
+  return cookiePlan ?? env.CLERK_BILLING_SIMULATED_PLAN;
+}
+
 export const billingRouter = createTRPCRouter({
-  createCheckout: orgProcedure.mutation(async ({ ctx }) => {
-    const result = await polar.checkouts.create({
-      products: [env.POLAR_PRODUCT_ID],
-      externalCustomerId: ctx.orgId,
-      successUrl: process.env.APP_URL,
-    });
-
-    if (!result.url) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to create checkout session",
-      });
-    }
-
-    return { checkoutUrl: result.url };
+  createCheckout: orgProcedure.mutation(async () => {
+    return { checkoutUrl: "/pricing" };
   }),
 
-  createPortalSession: orgProcedure.mutation(async ({ ctx }) => {
-    const result = await polar.customerSessions.create({
-      externalCustomerId: ctx.orgId,
-    });
-
-    if (!result.customerPortalUrl) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to create customer portal session",
-      });
-    }
-
-    return { portalUrl: result.customerPortalUrl };
+  createPortalSession: orgProcedure.mutation(async () => {
+    return { portalUrl: "/pricing" };
   }),
 
   getStatus: orgProcedure.query(async ({ ctx }) => {
-    try {
-      const customerState = await polar.customers.getStateExternal({
-        externalId: ctx.orgId,
-      });
-
-      const hasActiveSubscription =
-        (customerState.activeSubscriptions ?? []).length > 0;
-
-      // Sum up estimated costs from all meters across active subscriptions
-      let estimatedCostCents = 0;
-      for (const sub of customerState.activeSubscriptions ?? []) {
-        for (const meter of sub.meters ?? []) {
-          estimatedCostCents += meter.amount ?? 0;
-        }
-      }
-
+    if (isBillingSimulationEnabled()) {
+      const planKey = await getSimulatedPlan();
       return {
-        hasActiveSubscription,
-        customerId: customerState.id,
-        estimatedCostCents,
-      };
-    } catch {
-      // Customer doesn't exist yet in Polar
-      return {
-        hasActiveSubscription: false,
-        customerId: null,
+        hasActiveSubscription: planKey !== "free",
+        customerId: ctx.orgId,
         estimatedCostCents: 0,
+        planKey,
+        planLabel: PLAN_LABELS[planKey],
+        isSimulated: true,
       };
     }
+
+    const { has } = await auth();
+    const hasPro = has({ plan: "pro" });
+    const hasStandard = has({ plan: "standard" });
+    const planKey: PlanKey = hasPro ? "pro" : hasStandard ? "standard" : "free";
+
+    return {
+      hasActiveSubscription: planKey !== "free",
+      customerId: ctx.orgId,
+      estimatedCostCents: 0,
+      planKey,
+      planLabel: PLAN_LABELS[planKey],
+      isSimulated: false,
+    };
   }),
 });

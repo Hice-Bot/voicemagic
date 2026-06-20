@@ -10,7 +10,7 @@ A text-to-speech SaaS application at [voicemagic.dev](https://voicemagic.dev).
 - **DB ORM**: Prisma 7 (PostgreSQL via Neon)
 - **API layer**: tRPC 11 + TanStack Query
 - **Auth**: Clerk (Next.js SDK v6)
-- **Billing**: Polar
+- **Billing**: Clerk Billing
 - **Storage**: AWS S3-compatible (Cloudflare R2)
 - **TTS engine**: Chatterbox (`chatterbox_tts.py` sidecar, called via `src/lib/chatterbox-client.ts`)
 - **Error tracking**: Sentry
@@ -54,7 +54,6 @@ A text-to-speech SaaS application at [voicemagic.dev](https://voicemagic.dev).
 │   │   ├── env.ts            # t3-env validated env vars
 │   │   ├── chatterbox-client.ts  # TTS sidecar client
 │   │   ├── r2.ts             # R2 storage
-│   │   ├── polar.ts          # Billing
 │   │   ├── api-keys.ts       # API key hashing/validation
 │   │   └── api-auth.ts       # API route auth helpers
 │   ├── components/           # Shared UI components (shadcn/ui based)

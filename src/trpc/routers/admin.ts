@@ -1,6 +1,5 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
-import { polar } from "@/lib/polar";
 import { prisma } from "@/lib/db";
 import { createTRPCRouter, adminProcedure } from "../init";
 
@@ -14,23 +13,6 @@ const planInputSchema = z.object({
   isActive: z.boolean(),
   sortOrder: z.number().int(),
 });
-
-type PolarListResponse<T> = {
-  items?: T[];
-  result?: {
-    items?: T[];
-  };
-};
-
-type PolarOrder = {
-  netAmount?: number;
-  amount?: number;
-  createdAt: string | Date;
-};
-
-type PolarSubscription = {
-  status: string;
-};
 
 export const adminRouter = createTRPCRouter({
   getOverview: adminProcedure.query(async () => {
@@ -51,35 +33,10 @@ export const adminRouter = createTRPCRouter({
         clerk.users.getUserList({ limit: 1 }),
       ]);
 
-    let totalRevenueCents = 0;
-    let revenueByMonth: Array<{ month: string; amount: number }> = [];
-    let activeSubscriptions = 0;
-
-    try {
-      const [ordersRes, subsRes] = await Promise.all([
-        polar.orders.list({ limit: 100 }) as Promise<PolarListResponse<PolarOrder>>,
-        polar.subscriptions.list({ limit: 100 }) as Promise<PolarListResponse<PolarSubscription>>,
-      ]);
-
-      const orders = ordersRes.items ?? ordersRes.result?.items ?? [];
-      const subs = subsRes.items ?? subsRes.result?.items ?? [];
-
-      activeSubscriptions = subs.filter((s) => s.status === "active").length;
-
-      const byMonth: Record<string, number> = {};
-      for (const order of orders) {
-        const amt = order.netAmount ?? order.amount ?? 0;
-        totalRevenueCents += amt;
-        const month = new Date(order.createdAt).toISOString().slice(0, 7);
-        byMonth[month] = (byMonth[month] ?? 0) + amt;
-      }
-      revenueByMonth = Object.entries(byMonth)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([month, amount]) => ({ month, amount }));
-    } catch {
-      // Polar not configured or sandbox — return zeros
-    }
-
+    // Clerk Billing revenue/subscription exports are managed outside this app.
+    const totalRevenueCents = 0;
+    const revenueByMonth: Array<{ month: string; amount: number }> = [];
+    const activeSubscriptions = 0;
     return {
       totalUsers,
       totalGenerations,
@@ -128,8 +85,8 @@ export const adminRouter = createTRPCRouter({
         totalCount,
         users: users.map((u) => ({
           id: u.id,
-          name: [u.firstName, u.lastName].filter(Boolean).join(" ") || u.username || "—",
-          email: u.emailAddresses[0]?.emailAddress ?? "—",
+          name: [u.firstName, u.lastName].filter(Boolean).join(" ") || u.username || "â€”",
+          email: u.emailAddresses[0]?.emailAddress ?? "â€”",
           imageUrl: u.imageUrl,
           createdAt: new Date(u.createdAt).toISOString(),
           lastSignInAt: u.lastSignInAt ? new Date(u.lastSignInAt).toISOString() : null,

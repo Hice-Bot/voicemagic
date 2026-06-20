@@ -3,8 +3,6 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { chatterbox } from "@/lib/chatterbox-client";
 import { uploadAudio } from "@/lib/r2";
-import { polar } from "@/lib/polar";
-import { env } from "@/lib/env";
 import { authenticateApiRequest } from "@/lib/api-auth";
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
 
@@ -125,20 +123,6 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
-
-  // Fire-and-forget polar meter event
-  polar.events
-    .ingest({
-      events: [
-        {
-          name: env.POLAR_METER_TTS_GENERATION,
-          externalCustomerId: orgId,
-          metadata: { [env.POLAR_METER_TTS_PROPERTY]: input.text.length },
-          timestamp: new Date(),
-        },
-      ],
-    })
-    .catch(() => {});
 
   return Response.json(
     { id: generationId, audioUrl: `/api/v1/audio/${generationId}` },
