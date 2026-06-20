@@ -44,7 +44,9 @@ export const voicesRouter = createTRPCRouter({
         }];
       }
 
-      if (input?.category) where.category = input.category;
+      if (input?.category) {
+        where.categories = { some: { category: input.category } };
+      }
       if (input?.language) where.language = input.language;
       if (input?.variant) where.variant = input.variant;
 
@@ -64,7 +66,9 @@ export const voicesRouter = createTRPCRouter({
             id: true,
             name: true,
             description: true,
-            category: true,
+            categories: {
+              select: { category: true },
+            },
             language: true,
             variant: true,
             createdAt: true,
@@ -77,8 +81,9 @@ export const voicesRouter = createTRPCRouter({
       ]);
 
       const favoriteIds = new Set(favoriteRows.map((f) => f.voiceId));
-      const voices = rows.map((v) => ({
+      const voices = rows.map(({ categories, ...v }) => ({
         ...v,
+        category: categories[0]?.category ?? "GENERAL",
         isFavorite: favoriteIds.has(v.id),
       }));
 
@@ -109,9 +114,9 @@ export const voicesRouter = createTRPCRouter({
       }
 
       const [categoryFacets, languageFacets] = await Promise.all([
-        prisma.voice.groupBy({
+        prisma.voiceCategoryAssignment.groupBy({
           by: ["category"],
-          where: facetWhere,
+          where: { voice: facetWhere },
           _count: { _all: true },
         }),
         prisma.voice.groupBy({
