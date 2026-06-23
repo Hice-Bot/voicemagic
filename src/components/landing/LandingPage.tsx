@@ -411,11 +411,11 @@ function Features() {
 
 // ── Voice Showcase ────────────────────────────────────────────────────────────
 const VOICES = [
-  { name: "Esther", category: "Conversational", duration: "0:05", hue: 275, genId: "cmp0cwocq000001qocmec4r8u", transcript: "Testing Esther. This is Esther here." },
-  { name: "Adrian", category: "Narrative", duration: "0:03", hue: 310, genId: "cmp0bgezm000101quoo5wn67a", transcript: "Testing one, two, three." },
-  { name: "Andrew", category: "Documentary", duration: "0:04", hue: 245, genId: "cmp0bdzv2000001qui6p8vcsz", transcript: "Testing hello hello." },
-  { name: "Adam", category: "Character", duration: "0:06", hue: 340, genId: "cmonm2kqm000001qh6gkwvxdm", transcript: "Yee haw! Be a lot cooler if ya did..." },
-  { name: "Jeff", category: "Energetic", duration: "0:06", hue: 200, genId: "cmoalvtuz000401nxlb51ibqa", transcript: "Welcome to the jungle! We got fun and games!" },
+  { name: "Esther", category: "Conversational", duration: "0:07", hue: 275, genId: "cmqr7rskk0000y1i68pvwzvfk", transcript: "Welcome back. Today we are slowing things down and making the complicated parts feel simple, clear, and surprisingly doable." },
+  { name: "Adrian", category: "Narrative", duration: "0:07", hue: 310, genId: "cmqr7rvzo0001y1i663zsu744", transcript: "The storm rolled across the valley just before sunrise, turning the quiet road ahead into a ribbon of silver light." },
+  { name: "Andrew", category: "Documentary", duration: "0:08", hue: 245, genId: "cmqr7rzm60002y1i63fwbkm3e", transcript: "Far below the surface, where sunlight disappears, entire ecosystems survive in silence, pressure, and permanent night." },
+  { name: "Adam", category: "Character", duration: "0:07", hue: 340, genId: "cmqr7s2tk0003y1i6ilucmlqj", transcript: "Alright, partner, let us fire this thing up. We have one take, one wild idea, and just enough coffee to make it work." },
+  { name: "Jeff", category: "Energetic", duration: "0:07", hue: 200, genId: "cmqr7s6jy0004y1i6o7raniev", transcript: "Let us go. If you have been waiting for the right moment to build something bold, this is it. Hit record and start." },
 ];
 
 function PlayIcon() {
