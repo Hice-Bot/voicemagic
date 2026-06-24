@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { getPlanStatus } from "@/features/billing/lib/plan-status";
 import { chatterbox } from "@/lib/chatterbox-client";
 import { uploadAudio } from "@/lib/r2";
 import { authenticateApiRequest } from "@/lib/api-auth";
@@ -39,6 +40,16 @@ export async function POST(request: Request) {
   }
 
   const input = parsed.data;
+  const planStatus = await getPlanStatus(orgId);
+  if (planStatus.monthlyCreditsRemaining < input.text.length) {
+    return Response.json(
+      {
+        error: `Monthly credit limit reached for the ${planStatus.planLabel} plan`,
+        code: "CREDIT_LIMIT_REACHED",
+      },
+      { status: 402 },
+    );
+  }
 
   const voice = await prisma.voice.findUnique({
     where: {

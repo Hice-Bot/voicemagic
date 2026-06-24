@@ -1,5 +1,6 @@
+"use client";
+
 import { Headphones } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -12,6 +13,10 @@ export function PageHeader({
   title: string;
   className?: string;
 }) {
+  const handleSupportOpen = () => {
+    window.dispatchEvent(new Event("voicemagic:support-open"));
+  };
+
   return (
     <div
       className={cn(
@@ -24,11 +29,9 @@ export function PageHeader({
         <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
       </div>
       <div className="flex items-center gap-3">
-         <Button variant="outline" size="sm" asChild>
-          <Link href="mailto:business@codewithantonio.com">
-            <Headphones />
-            <span className="hidden lg:block">Need help?</span>
-          </Link>
+         <Button variant="outline" size="sm" type="button" onClick={handleSupportOpen}>
+          <Headphones />
+          <span className="hidden lg:block">Need help?</span>
         </Button>
       </div>
     </div>

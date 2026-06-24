@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, Mic, Search, Sparkles } from "lucide-react";
+import { Heart, Mic, Search } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -11,8 +11,7 @@ interface VoicesToolbarProps {
   counts: { total: number; favorites: number; cloned: number };
 }
 
-const VIEWS: { id: VoiceView; label: string; icon: typeof Mic; key: "total" | "favorites" | "cloned" }[] = [
-  { id: "all",       label: "All voices",  icon: Sparkles, key: "total" },
+const VIEWS: { id: Exclude<VoiceView, "all">; label: string; icon: typeof Mic; key: "favorites" | "cloned" }[] = [
   { id: "favorites", label: "Favorites",   icon: Heart,    key: "favorites" },
   { id: "cloned",    label: "My clones",   icon: Mic,      key: "cloned" },
 ];

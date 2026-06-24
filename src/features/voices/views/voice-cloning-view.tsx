@@ -14,8 +14,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { VoiceCreateForm } from "../components/voice-create-form";
 
-const FREE_VOICE_LIMIT = 3;
-
 function ClonedVoiceCard({
   voice,
   onDelete,
@@ -91,10 +89,10 @@ export function VoiceCloningView() {
   }, [router]);
 
   const clonedVoices = voicesData?.voices ?? [];
-  const isSubscribed = billingData?.hasActiveSubscription ?? false;
   const slotsUsed = clonedVoices.length;
-  const slotsTotal = isSubscribed ? null : FREE_VOICE_LIMIT;
-  const atLimit = slotsTotal !== null && slotsUsed >= slotsTotal;
+  const slotsTotal = billingData?.voiceCloneLimit ?? 1;
+  const slotsRemaining = Math.max(0, slotsTotal - slotsUsed);
+  const atLimit = slotsUsed >= slotsTotal;
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 p-6 max-w-5xl mx-auto w-full min-h-0">
@@ -112,28 +110,25 @@ export function VoiceCloningView() {
         <div className="rounded-xl border border-border bg-card p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium">Voice clones</p>
-            {isSubscribed ? (
-              <Badge variant="secondary" className="text-xs">Unlimited</Badge>
-            ) : (
-              <span className="text-xs text-muted-foreground">
-                {slotsUsed} / {slotsTotal} used
-              </span>
-            )}
+            <Badge variant="secondary" className="text-xs">
+              {billingData?.planLabel ?? "Free"}
+            </Badge>
           </div>
+          <span className="text-xs text-muted-foreground">
+            {slotsUsed} / {slotsTotal} used - {slotsRemaining} remaining
+          </span>
 
-          {!isSubscribed && (
-            <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-              <div
-                className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${Math.min(100, (slotsUsed / FREE_VOICE_LIMIT) * 100)}%` }}
-              />
-            </div>
-          )}
+          <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${Math.min(100, (slotsUsed / slotsTotal) * 100)}%` }}
+            />
+          </div>
 
           {atLimit && (
             <div className="flex flex-col gap-2">
               <p className="text-xs text-muted-foreground">
-                You&apos;ve reached the free limit. Upgrade for unlimited voice clones.
+                You&apos;ve reached the {billingData?.planLabel ?? "Free"} plan limit. Choose a larger plan for more custom voices.
               </p>
               <Button size="sm" onClick={checkout} className="w-full">
                 <Sparkles className="size-3.5" />
@@ -200,7 +195,7 @@ export function VoiceCloningView() {
             <Mic className="size-8 text-muted-foreground" />
             <p className="text-sm font-medium">Voice clone limit reached</p>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Upgrade your plan to create unlimited custom voices.
+              Choose a larger plan to create more custom voices.
             </p>
             <Button onClick={checkout}>
               <Sparkles className="size-4" />

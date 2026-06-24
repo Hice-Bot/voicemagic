@@ -4,10 +4,8 @@ import { Sparkles } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
 import { useQueryState } from "nuqs";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import type { VoiceCategory } from "@/generated/prisma/client";
 
 import { VoiceCard } from "../components/voice-card";
-import { VoiceFilterSidebar } from "../components/voice-filter-sidebar";
 import { VoicesToolbar } from "../components/voices-toolbar";
 import Link from "next/link";
 import { voicesSearchParams } from "../lib/params";
@@ -51,15 +49,11 @@ export function VoicesView() {
   const trpc = useTRPC();
   const [query] = useQueryState("query", voicesSearchParams.query);
   const [view] = useQueryState("view", voicesSearchParams.view);
-  const [category] = useQueryState("category", voicesSearchParams.category);
-  const [language] = useQueryState("language", voicesSearchParams.language);
 
   const { data } = useSuspenseQuery(
     trpc.voices.getAll.queryOptions({
       query: query || undefined,
       view,
-      category: (category || undefined) as VoiceCategory | undefined,
-      language: language || undefined,
     }),
   );
 
@@ -82,10 +76,6 @@ export function VoicesView() {
       </header>
 
       <div className="vx-shell">
-        <VoiceFilterSidebar
-          categoryFacets={data.facets.category}
-          languageFacets={data.facets.language}
-        />
         <div>
           <VoicesToolbar counts={data.counts} />
           {data.voices.length === 0 ? (

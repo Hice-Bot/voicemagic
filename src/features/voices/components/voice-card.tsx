@@ -37,22 +37,9 @@ interface VoiceCardProps {
   voice: VoiceItem;
 }
 
-const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-
-function parseLanguage(locale: string) {
-  const [, country] = locale.split("-");
-  if (!country) return { flag: "", region: locale };
-  const flag = [...country.toUpperCase()]
-    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
-    .join("");
-  const region = regionNames.of(country) ?? country;
-  return { flag, region };
-}
-
 export function VoiceCard({ voice }: VoiceCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [optimisticFav, setOptimisticFav] = useState<boolean | null>(null);
-  const { flag, region } = parseLanguage(voice.language);
 
   const audioSrc = `/api/voices/${encodeURIComponent(voice.id)}`;
   const { isPlaying, isLoading, togglePlay } = useAudioPlayback(audioSrc);
@@ -133,8 +120,7 @@ export function VoiceCard({ voice }: VoiceCardProps) {
 
       <div className="vx-card-foot">
         <span className="vx-card-lang">
-          <span aria-hidden="true">{flag}</span>
-          {region}
+          {isCloned ? "Private custom voice" : "Built-in voice"}
         </span>
         <div className="vx-card-actions">
           <button

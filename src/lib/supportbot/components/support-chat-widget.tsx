@@ -84,6 +84,18 @@ export function SupportChatWidget({
     }
   }, [open]);
 
+  useEffect(() => {
+    function handleSupportOpen() {
+      setOpen(true);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+
+    window.addEventListener("voicemagic:support-open", handleSupportOpen);
+    return () => {
+      window.removeEventListener("voicemagic:support-open", handleSupportOpen);
+    };
+  }, []);
+
   function handleToggle() {
     setOpen((v) => !v);
   }

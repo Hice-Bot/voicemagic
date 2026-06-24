@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 import {
@@ -24,13 +23,13 @@ import {
   Home,
   LayoutGrid,
   Volume2,
-  Settings,
   Headphones,
   ShieldCheck,
   LogOut,
   Braces,
 } from "lucide-react";
 import Link from "next/link";
+import { BrandGlyph } from "@/components/brand/brand-mark";
 import { UsageContainer } from "@/features/billing/components/usage-container";
 
 interface MenuItem {
@@ -101,6 +100,10 @@ export function DashboardSidebar({ isAdmin = false }: { isAdmin?: boolean }) {
     window.location.href = "/api/sign-out";
   };
 
+  const handleSupportOpen = () => {
+    window.dispatchEvent(new Event("voicemagic:support-open"));
+  };
+
   const displayName =
     user?.fullName ||
     user?.primaryEmailAddress?.emailAddress ||
@@ -134,13 +137,8 @@ export function DashboardSidebar({ isAdmin = false }: { isAdmin?: boolean }) {
 
   const othersMenuItems: MenuItem[] = [
     {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings,
-    },
-    {
       title: "Help and support",
-      url: "mailto:business@codewithantonio.com",
+      onClick: handleSupportOpen,
       icon: Headphones,
     },
   ];
@@ -151,14 +149,8 @@ export function DashboardSidebar({ isAdmin = false }: { isAdmin?: boolean }) {
       <SidebarHeader className="flex flex-col gap-4 pt-4">
         <div 
         className="flex items-center gap-2 pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
-          <Image
-            src="/logo.svg"
-            alt="Voicemagic"
-            width={24}
-            height={24}
-            className="rounded-sm"
-          />
-          <span className="group-data-[collapsible=icon]:hidden font-semibold text-lg tracking-tighter text-foreground">
+          <BrandGlyph className="size-7 shrink-0 text-[var(--app-brand-soft)]" />
+          <span className="group-data-[collapsible=icon]:hidden font-[var(--app-font-display)] text-[20px] font-bold tracking-[-0.02em] text-foreground">
             Voicemagic
           </span>
           <SidebarTrigger className="ml-auto lg:hidden" />

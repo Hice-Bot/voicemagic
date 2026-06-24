@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { parseBuffer } from "music-metadata";
 import { z } from "zod";
+import { getPlanStatus } from "@/features/billing/lib/plan-status";
 import { prisma } from "@/lib/db";
 import { uploadAudio } from "@/lib/r2";
 import { VOICE_CATEGORIES } from "@/features/voices/data/voice-categories";
@@ -24,6 +25,17 @@ export async function POST(request: Request) {
   }
 
   const orgId = userId;
+  const planStatus = await getPlanStatus(orgId);
+
+  if (planStatus.voiceCloneCount >= planStatus.voiceCloneLimit) {
+    return Response.json(
+      {
+        error: `Voice clone limit reached for the ${planStatus.planLabel} plan. Choose a larger plan for more custom voices.`,
+        code: "VOICE_CLONE_LIMIT_REACHED",
+      },
+      { status: 402 },
+    );
+  }
 
   const url = new URL(request.url);
 

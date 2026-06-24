@@ -2,10 +2,12 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { getPlanStatus } from "@/features/billing/lib/plan-status";
 import { chatterbox } from "@/lib/chatterbox-client";
 import { uploadAudio } from "@/lib/r2";
 import { authenticateApiRequest } from "@/lib/api-auth";
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
+import { normalizeVoiceDisplay } from "@/features/voices/lib/voice-display";
 
 async function handleMcpRequest(request: Request): Promise<Response> {
   let orgId: string;
@@ -49,7 +51,7 @@ async function handleMcpRequest(request: Request): Promise<Response> {
             type: "text" as const,
             text: JSON.stringify({
               voices: voices.map(({ categories, ...voice }) => ({
-                ...voice,
+                ...normalizeVoiceDisplay(voice),
                 category: categories[0]?.category ?? "GENERAL",
               })),
             }, null, 2),
@@ -99,6 +101,19 @@ async function handleMcpRequest(request: Request): Promise<Response> {
         .describe("Repetition penalty (1-2)"),
     },
     async ({ text, voiceId, temperature, topP, topK, repetitionPenalty }) => {
+      const planStatus = await getPlanStatus(orgId);
+      if (planStatus.monthlyCreditsRemaining < text.length) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Error: Monthly credit limit reached for the ${planStatus.planLabel} plan`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
       const voice = await prisma.voice.findUnique({
         where: {
           id: voiceId,

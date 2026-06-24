@@ -12,7 +12,7 @@ const PRICING_PLANS = [
     price: "$0",
     cadence: "forever",
     description: "A starter credit pool for trying web generation, API calls, and MCP agent workflows.",
-    features: ["Shared credits across web + API/MCP", "Built-in voices", "Good for testing the flow"],
+    features: ["10k monthly credits", "1 custom voice", "Shared credits across web + API/MCP"],
   },
   {
     key: "standard",
@@ -21,7 +21,7 @@ const PRICING_PLANS = [
     price: "$19",
     cadence: "month",
     description: "The practical tier for regular creator work and lightweight agent automation.",
-    features: ["Larger shared credit pool", "Voice cloning", "API and MCP access included"],
+    features: ["250k monthly credits", "10 custom voices", "API and MCP access included"],
     highlighted: true,
   },
   {
@@ -31,7 +31,7 @@ const PRICING_PLANS = [
     price: "$49",
     cadence: "month",
     description: "More room for production workloads, automations, and heavier web/API usage.",
-    features: ["Largest shared credit pool", "Priority production workflows", "API and MCP access included"],
+    features: ["1M monthly credits", "50 custom voices", "API and MCP access included"],
   },
 ];
 

@@ -116,14 +116,12 @@
 
 /* ===== VOICES LIBRARY ===== */
 .vx-shell {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 24px;
+  display: block;
   padding: 24px 28px 40px;
   max-width: 1400px;
 }
 @media (max-width: 900px) {
-  .vx-shell { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+  .vx-shell { padding: 16px; }
   .vx-sidebar { position: static !important; max-height: none !important; }
 }
 

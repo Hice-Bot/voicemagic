@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { formatCredits } from "@/features/billing/lib/plan-catalog";
 import { useTRPC } from "@/trpc/client";
 
 export function AccountSubscriptionPanel() {
@@ -52,6 +53,24 @@ export function AccountSubscriptionPanel() {
             Plan changes are handled by Clerk Billing. Your web dashboard, API
             keys, and MCP server all use the same plan credits.
           </p>
+        )}
+        {!isLoading && data && (
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-md border border-border bg-background p-3">
+              <p className="text-xs text-muted-foreground">Monthly credits</p>
+              <p className="text-sm font-semibold">{formatCredits(data.monthlyCredits)}</p>
+            </div>
+            <div className="rounded-md border border-border bg-background p-3">
+              <p className="text-xs text-muted-foreground">Credits remaining</p>
+              <p className="text-sm font-semibold">{formatCredits(data.monthlyCreditsRemaining)}</p>
+            </div>
+            <div className="rounded-md border border-border bg-background p-3">
+              <p className="text-xs text-muted-foreground">Custom voices</p>
+              <p className="text-sm font-semibold">
+                {data.voiceCloneCount} / {data.voiceCloneLimit}
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </section>

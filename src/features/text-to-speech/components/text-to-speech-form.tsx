@@ -72,13 +72,18 @@ export function TextToSpeechForm({
         const message =
           error instanceof Error ? error.message : "Failed to generate audio";
 
-        if (message === "SUBSCRIPTION_REQUIRED") {
-          toast.error("Subscription required", {
-            action: {
-              label: "Subscribe",
-              onClick: () => checkout(),
+        if (message === "SUBSCRIPTION_REQUIRED" || message === "CREDIT_LIMIT_REACHED") {
+          toast.error(
+            message === "CREDIT_LIMIT_REACHED"
+              ? "Monthly credit limit reached"
+              : "Subscription required",
+            {
+              action: {
+                label: "Choose plan",
+                onClick: () => checkout(),
+              },
             },
-          });
+          );
         } else {
           toast.error(message);
         }

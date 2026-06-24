@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { chatterbox } from "@/lib/chatterbox-client";
+import { getPlanStatus } from "@/features/billing/lib/plan-status";
 import { prisma } from "@/lib/db";
 import { uploadAudio } from "@/lib/r2";
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
@@ -54,6 +55,14 @@ export const generationsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const planStatus = await getPlanStatus(ctx.orgId);
+      if (planStatus.monthlyCreditsRemaining < input.text.length) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "CREDIT_LIMIT_REACHED",
+        });
+      }
+
       const voice = await prisma.voice.findUnique({
         where: {
           id: input.voiceId,

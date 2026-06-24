@@ -2,12 +2,14 @@
 
 import { useUser } from "@clerk/nextjs";
 import { Headphones } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
 export function DashboardHeader() {
   const { isLoaded, user } = useUser();
+  const handleSupportOpen = () => {
+    window.dispatchEvent(new Event("voicemagic:support-open"));
+  };
 
   return (
     <div className="flex items-start justify-between">
@@ -21,11 +23,9 @@ export function DashboardHeader() {
       </div>
 
       <div className="lg:flex items-center gap-3 hidden">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="mailto:business@codewithantonio.com">
-            <Headphones />
-            <span className="hidden lg:block">Need help?</span>
-          </Link>
+        <Button variant="outline" size="sm" type="button" onClick={handleSupportOpen}>
+          <Headphones />
+          <span className="hidden lg:block">Need help?</span>
         </Button>
       </div>
 

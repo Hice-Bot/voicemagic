@@ -2,6 +2,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "@/lib/db";
 import { deleteAudio } from "@/lib/r2";
+import { normalizeVoiceDisplay } from "@/features/voices/lib/voice-display";
 import { createTRPCRouter, orgProcedure } from "../init";
 import type { Prisma, VoiceCategory, VoiceVariant } from "@/generated/prisma/client";
 
@@ -83,7 +84,7 @@ export const voicesRouter = createTRPCRouter({
 
       const favoriteIds = new Set(favoriteRows.map((f) => f.voiceId));
       const voices = rows.map(({ categories, ...v }) => ({
-        ...v,
+        ...normalizeVoiceDisplay(v),
         category: categories[0]?.category ?? "GENERAL",
         isFavorite: favoriteIds.has(v.id),
       }));
