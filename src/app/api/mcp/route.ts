@@ -33,7 +33,10 @@ async function handleMcpRequest(request: Request): Promise<Response> {
           id: true,
           name: true,
           description: true,
-          category: true,
+          categories: {
+            select: { category: true },
+            take: 1,
+          },
           language: true,
           variant: true,
         },
@@ -44,7 +47,12 @@ async function handleMcpRequest(request: Request): Promise<Response> {
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify({ voices }, null, 2),
+            text: JSON.stringify({
+              voices: voices.map(({ categories, ...voice }) => ({
+                ...voice,
+                category: categories[0]?.category ?? "GENERAL",
+              })),
+            }, null, 2),
           },
         ],
       };

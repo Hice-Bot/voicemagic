@@ -207,8 +207,11 @@ async function seedSystemVoice(name: string) {
         r2ObjectKey,
         ...(meta && {
           description: meta.description,
-          category: meta.category,
           language: meta.language,
+          categories: {
+            deleteMany: {},
+            create: { category: meta.category },
+          },
         }),
       },
     });
@@ -224,8 +227,10 @@ async function seedSystemVoice(name: string) {
       orgId: null,
       ...(meta && {
         description: meta.description,
-        category: meta.category,
         language: meta.language,
+        categories: {
+          create: { category: meta.category },
+        },
       }),
     },
     select: {
