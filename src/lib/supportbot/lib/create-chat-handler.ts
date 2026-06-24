@@ -30,6 +30,11 @@ const openRouterResponseSchema = z.object({
                     text: z.string().optional(),
                   }),
                 ),
+                z.object({
+                  type: z.string().optional(),
+                  text: z.string().optional(),
+                  content: z.string().optional(),
+                }),
               ])
               .nullable()
               .optional(),
@@ -101,6 +106,10 @@ function getOpenRouterContent(responseBody: unknown) {
       .filter(Boolean)
       .join("")
       .trim();
+  }
+
+  if (content && typeof content === "object") {
+    return (content.text ?? content.content ?? "").trim();
   }
 
   return null;
