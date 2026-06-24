@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import "../landing.css";
 
-const SIMULATED_PLANS = [
+const PRICING_PLANS = [
   {
     key: "free",
     eyebrow: "No card required",
@@ -38,22 +38,26 @@ function isBillingSimulationEnabled() {
   return process.env.CLERK_BILLING_SIMULATION === "true" || process.env.CLERK_BILLING_SIMULATION === "1";
 }
 
-function SimulatedPricingTable() {
+function SalePricingTable() {
   return (
     <section className="pricing-sec">
       <div className="pricing-orbit pricing-orbit-1" />
       <div className="pricing-orbit pricing-orbit-2" />
       <div className="section-head pricing-head">
-        <div className="section-kicker">Simulated Clerk checkout</div>
-        <h1 className="section-h2">Choose a test plan.</h1>
+        <div className="section-kicker">Pricing</div>
+        <h1 className="section-h2">Simple credits. One balance.</h1>
         <p className="section-sub">
-          Development billing simulation is enabled. These buttons do not charge a card; they set your test plan so
-          web usage, API usage, and MCP usage all draw from the same simulated credit base.
+          Pick the plan that fits your workflow. Web usage, API calls, and MCP agent usage all draw from the same
+          credit base, so there is one plan and one pool to understand.
+        </p>
+        <p className="section-sub">
+          (While Voicemagic is listed for sale, plan selection uses simulated accounts so prospective buyers can test
+          onboarding, plan access, and credit behavior without processing live payments.)
         </p>
       </div>
 
       <div className="pricing-grid">
-        {SIMULATED_PLANS.map((plan) => (
+        {PRICING_PLANS.map((plan) => (
           <article
             key={plan.key}
             className={`price-card${plan.highlighted ? " price-card-featured" : ""}`}
@@ -77,7 +81,7 @@ function SimulatedPricingTable() {
                 className={`price-cta${plan.highlighted ? " price-cta-primary" : ""}`}
                 type="submit"
               >
-                Simulate {plan.name}
+                {plan.key === "free" ? "Start free" : `Choose ${plan.name}`}
               </button>
             </form>
             <ul className="price-features">
@@ -141,7 +145,7 @@ export default function PricingPage() {
         </div>
       </nav>
 
-      {isBillingSimulationEnabled() ? <SimulatedPricingTable /> : <ClerkPricingSection />}
+      {isBillingSimulationEnabled() ? <SalePricingTable /> : <ClerkPricingSection />}
     </main>
   );
 }
