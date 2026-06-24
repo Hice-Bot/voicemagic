@@ -9,6 +9,8 @@ const DEMO_IDS = new Set([
   "cmqr7rzm60002y1i63fwbkm3e",
   "cmqr7s2tk0003y1i6ilucmlqj",
   "cmqr7s6jy0004y1i6o7raniev",
+  "cmqrj7i840000a1i6brpwzamm",
+  "cmqrj7lym0001a1i60r4ntn0u",
 ]);
 
 export async function GET(
