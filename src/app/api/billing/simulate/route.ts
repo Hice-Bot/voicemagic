@@ -13,11 +13,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "Billing simulation is disabled" }, { status: 404 });
   }
 
-  const { userId } = await auth();
-  if (!userId) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   const formData = await request.formData();
   const plan = formData.get("plan");
 
@@ -34,5 +29,6 @@ export async function POST(request: Request) {
     secure: process.env.NODE_ENV === "production",
   });
 
-  return NextResponse.redirect(new URL("/text-to-speech", request.url), 303);
+  const { userId } = await auth();
+  return NextResponse.redirect(new URL(userId ? "/text-to-speech" : "/sign-up", request.url), 303);
 }

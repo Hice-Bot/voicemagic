@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { PublicFooter } from "@/components/marketing/PublicFooter";
+
 const BASE_URL = "https://voicemagic.dev";
 
 function CodeBlock({ code }: { code: string }) {
@@ -302,7 +304,6 @@ export default function DocsPage() {
           </div>
         </Section>
 
-        {/* Footer */}
         <div className="border-t border-zinc-200 pt-8 flex items-center justify-between text-xs text-zinc-400">
           <span>Voicemagic API — v1</span>
           <Link
@@ -313,6 +314,7 @@ export default function DocsPage() {
           </Link>
         </div>
       </div>
+      <PublicFooter variant="light" />
     </div>
   );
 }

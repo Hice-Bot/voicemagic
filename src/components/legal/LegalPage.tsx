@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PublicFooter } from "@/components/marketing/PublicFooter";
 
 interface LegalSection {
   title: string;
@@ -59,14 +60,15 @@ export function LegalPage({
           ))}
         </div>
 
-        <footer className="border-t border-white/10 pt-6 text-sm leading-6 text-white/55">
+        <div className="border-t border-white/10 pt-6 text-sm leading-6 text-white/55">
           Questions about these terms? Contact us at{" "}
           <a href="mailto:jeff@jeffhampton.us" className="font-medium text-white underline underline-offset-4">
             jeff@jeffhampton.us
           </a>
           .
-        </footer>
+        </div>
       </div>
+      <PublicFooter />
     </main>
   );
 }

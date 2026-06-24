@@ -1,6 +1,7 @@
 import { PricingTable } from "@clerk/nextjs";
 import Link from "next/link";
 
+import { PublicFooter } from "@/components/marketing/PublicFooter";
 import "../landing.css";
 
 const PRICING_PLANS = [
@@ -44,7 +45,6 @@ function SalePricingTable() {
       <div className="pricing-orbit pricing-orbit-1" />
       <div className="pricing-orbit pricing-orbit-2" />
       <div className="section-head pricing-head">
-        <div className="section-kicker">Pricing</div>
         <h1 className="section-h2">Simple credits. One balance.</h1>
         <p className="section-sub">
           Pick the plan that fits your workflow. Web usage, API calls, and MCP agent usage all draw from the same
@@ -63,7 +63,7 @@ function SalePricingTable() {
             className={`price-card${plan.highlighted ? " price-card-featured" : ""}`}
           >
             {plan.highlighted && <div className="price-ribbon">Recommended</div>}
-            <div className="price-topline">
+            <div className="price-top">
               <div>
                 <div className="price-eyebrow">{plan.eyebrow}</div>
                 <h2 className="price-name">{plan.name}</h2>
@@ -102,7 +102,6 @@ function ClerkPricingSection() {
       <div className="pricing-orbit pricing-orbit-1" />
       <div className="pricing-orbit pricing-orbit-2" />
       <div className="section-head pricing-head">
-        <div className="section-kicker">Clerk Billing</div>
         <h1 className="section-h2">Simple credits. One balance.</h1>
         <p className="section-sub">
           Pick a plan in Clerk Billing. Web usage, API calls, and MCP agent usage all draw from the same credit base,
@@ -135,8 +134,6 @@ export default function PricingPage() {
             <span className="nav-wordmark">Voicemagic</span>
           </Link>
           <div className="nav-links">
-            <Link href="/#features">Features</Link>
-            <Link href="/#voices">Voices</Link>
             <Link href="/docs">API</Link>
           </div>
           <div className="nav-ctas">
@@ -146,6 +143,7 @@ export default function PricingPage() {
       </nav>
 
       {isBillingSimulationEnabled() ? <SalePricingTable /> : <ClerkPricingSection />}
+      <PublicFooter />
     </main>
   );
 }

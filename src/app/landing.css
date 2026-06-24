@@ -753,6 +753,7 @@
 .price-card:hover::before { opacity: 1; }
 .price-card-featured {
   border-color: oklch(0.62 0.22 calc(var(--brand-hue) * 1deg) / 0.62);
+  padding-top: 52px;
   background:
     radial-gradient(ellipse at 50% -10%, oklch(0.5 0.22 calc(var(--brand-hue) * 1deg) / 0.26), transparent 64%),
     linear-gradient(180deg, oklch(0.13 0.04 280 / 0.92), oklch(0.065 0.025 280 / 0.86));
@@ -763,7 +764,8 @@
 }
 .price-ribbon {
   position: absolute;
-  top: 18px; right: 18px;
+  top: 16px; right: 50%;
+  transform: translateX(50%);
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -869,21 +871,24 @@
   min-height: 48px;
   margin-bottom: 24px;
   border-radius: 999px;
-  border: 1px solid oklch(1 0 0 / 0.12);
-  background: oklch(1 0 0 / 0.055);
-  color: var(--ink);
+  border: 1px solid oklch(1 0 0 / 0.82);
+  background: linear-gradient(180deg, oklch(1 0 0), oklch(0.92 0.02 285));
+  color: oklch(0.12 0.03 280);
   font-weight: 650;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  box-shadow: 0 16px 36px -24px oklch(0 0 0 / 0.65);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .price-cta:hover {
   transform: translateY(-1px);
-  border-color: oklch(1 0 0 / 0.2);
-  background: oklch(1 0 0 / 0.085);
+  border-color: white;
+  background: white;
+  box-shadow: 0 20px 44px -24px oklch(0 0 0 / 0.7);
 }
 .price-cta-primary {
-  border-color: transparent;
-  background: linear-gradient(135deg, var(--brand), oklch(0.66 0.2 calc((var(--brand-hue) + 30) * 1deg)));
-  box-shadow: 0 18px 42px -24px var(--brand-glow);
+  border-color: oklch(0.95 0.08 92);
+  background: linear-gradient(135deg, oklch(0.93 0.12 92), oklch(0.78 0.16 68));
+  color: oklch(0.13 0.035 280);
+  box-shadow: 0 20px 48px -24px oklch(0.87 0.18 80 / 0.75);
 }
 .price-features {
   display: flex;

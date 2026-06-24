@@ -2,6 +2,7 @@ import { Mail } from "lucide-react";
 
 import { ContactForm } from "@/components/marketing/ContactForm";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
+import { PublicFooter } from "@/components/marketing/PublicFooter";
 
 export default function ContactPage() {
   return (
@@ -34,6 +35,7 @@ export default function ContactPage() {
 
         <ContactForm />
       </section>
+      <PublicFooter />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Bot, Braces, Mic2, Sparkles, Workflow } from "lucide-react";
 
 import { MarketingNav } from "@/components/marketing/MarketingNav";
+import { PublicFooter } from "@/components/marketing/PublicFooter";
 
 const pillars = [
   {
@@ -107,6 +108,7 @@ export default function AboutPage() {
           </div>
         </section>
       </section>
+      <PublicFooter />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
+import { PublicFooter } from "@/components/marketing/PublicFooter";
 
 // ── Deterministic pseudo-random ──────────────────────────────────────────────
 function seededRand(seed: number) {
@@ -849,44 +850,7 @@ function FinalCTA() {
 
 // ── Footer ────────────────────────────────────────────────────────────────────
 function Footer() {
-  return (
-    <footer className="vm-foot">
-      <div className="foot-inner">
-        <div className="foot-brand">
-          <div className="foot-wordmark">Voicemagic</div>
-          <div className="foot-tag">AI voice cloning for everyone.</div>
-        </div>
-        <div className="foot-cols">
-          <div className="foot-col">
-            <div className="foot-head">Product</div>
-            <a href="#features">Features</a>
-            <a href="#voices">Voices</a>
-            <Link href="https://voicemagic.dev/pricing">Pricing</Link>
-          </div>
-          <div className="foot-col">
-            <div className="foot-head">Developers</div>
-            <Link href="/docs">Documentation</Link>
-            <Link href="/docs">API reference</Link>
-          </div>
-          <div className="foot-col">
-            <div className="foot-head">Company</div>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-          </div>
-          <div className="foot-col">
-            <div className="foot-head">Legal</div>
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
-            <Link href="/acceptable-use">Acceptable use</Link>
-          </div>
-        </div>
-      </div>
-      <div className="foot-base">
-        <div>© 2026 Voicemagic Inc.</div>
-        <div>voicemagic.dev</div>
-      </div>
-    </footer>
-  );
+  return <PublicFooter />;
 }
 
 // ── Page wrapper ──────────────────────────────────────────────────────────────
