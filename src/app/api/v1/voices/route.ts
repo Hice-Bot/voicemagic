@@ -17,20 +17,12 @@ export async function GET(request: Request) {
       id: true,
       name: true,
       description: true,
-      categories: {
-        select: { category: true },
-        take: 1,
-      },
+      category: true,
       language: true,
       variant: true,
     },
     orderBy: [{ variant: "asc" }, { name: "asc" }],
   });
 
-  return Response.json({
-    voices: voices.map(({ categories, ...voice }) => ({
-      ...voice,
-      category: categories[0]?.category ?? "GENERAL",
-    })),
-  });
+  return Response.json({ voices });
 }

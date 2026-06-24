@@ -33,25 +33,18 @@ async function handleMcpRequest(request: Request): Promise<Response> {
           id: true,
           name: true,
           description: true,
-          categories: {
-            select: { category: true },
-            take: 1,
-          },
+          category: true,
           language: true,
           variant: true,
         },
         orderBy: [{ variant: "asc" }, { name: "asc" }],
       });
-      const voiceList = voices.map(({ categories, ...voice }) => ({
-        ...voice,
-        category: categories[0]?.category ?? "GENERAL",
-      }));
 
       return {
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify({ voices: voiceList }, null, 2),
+            text: JSON.stringify({ voices }, null, 2),
           },
         ],
       };

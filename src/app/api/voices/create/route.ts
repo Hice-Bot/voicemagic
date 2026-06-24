@@ -108,9 +108,7 @@ export async function POST(request: Request) {
         variant: "CUSTOM",
         orgId,
         description,
-        categories: {
-          create: { category },
-        },
+        category,
         language,
       },
       select: {
