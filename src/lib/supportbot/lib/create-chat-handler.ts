@@ -1,5 +1,3 @@
-import { createAnthropic } from "@ai-sdk/anthropic";
-import { streamText } from "ai";
 import { z } from "zod";
 import type { ChatApiHandlerOptions, SupportBotConfig } from "../types";
 import { DEFAULT_CONFIG } from "../types";
@@ -12,6 +10,34 @@ const messageSchema = z.object({
 const requestSchema = z.object({
   messages: z.array(messageSchema).min(1),
   config: z.record(z.string(), z.unknown()).optional(),
+});
+
+const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_DEFAULT_MODEL = "minimax/minimax-m3";
+
+const openRouterResponseSchema = z.object({
+  choices: z
+    .array(
+      z.object({
+        message: z
+          .object({
+            content: z
+              .union([
+                z.string(),
+                z.array(
+                  z.object({
+                    type: z.string().optional(),
+                    text: z.string().optional(),
+                  }),
+                ),
+              ])
+              .nullable()
+              .optional(),
+          })
+          .optional(),
+      }),
+    )
+    .min(1),
 });
 
 function createFallbackSupportReply(message: string) {
@@ -51,6 +77,82 @@ function createFallbackSupportReply(message: string) {
   ].join(" ");
 }
 
+function resolveOpenRouterModel(configModel: string) {
+  const envModel =
+    process.env.OPENROUTER_SUPPORT_MODEL?.trim() ||
+    process.env.OPENROUTER_MODEL?.trim();
+
+  if (envModel) return envModel;
+
+  // Old saved support settings may still contain Anthropic model IDs.
+  return configModel.includes("/") ? configModel : OPENROUTER_DEFAULT_MODEL;
+}
+
+function getOpenRouterContent(responseBody: unknown) {
+  const parsed = openRouterResponseSchema.safeParse(responseBody);
+  if (!parsed.success) return null;
+
+  const content = parsed.data.choices[0]?.message?.content;
+  if (typeof content === "string") return content.trim();
+
+  if (Array.isArray(content)) {
+    return content
+      .map((part) => part.text)
+      .filter(Boolean)
+      .join("")
+      .trim();
+  }
+
+  return null;
+}
+
+async function createOpenRouterSupportReply({
+  apiKey,
+  config,
+  messages,
+}: {
+  apiKey: string;
+  config: SupportBotConfig;
+  messages: z.infer<typeof messageSchema>[];
+}) {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${apiKey}`,
+    "Content-Type": "application/json",
+    "X-Title": "Voicemagic Support",
+  };
+  const referer = process.env.APP_URL?.trim() || "https://voicemagic.dev";
+  if (referer) headers["HTTP-Referer"] = referer;
+
+  const response = await fetch(OPENROUTER_API_URL, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      model: resolveOpenRouterModel(config.model),
+      messages: [
+        { role: "system", content: config.systemPrompt },
+        ...messages.map((message) => ({
+          role: message.role,
+          content: message.content,
+        })),
+      ],
+      max_tokens: 1024,
+      temperature: 0.2,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`OpenRouter support request failed with HTTP ${response.status}`);
+  }
+
+  const responseBody: unknown = await response.json();
+  const content = getOpenRouterContent(responseBody);
+  if (!content) {
+    throw new Error("OpenRouter support request returned no message content");
+  }
+
+  return content;
+}
+
 /**
  * Creates a Next.js App Router POST handler for the support chat API.
  *
@@ -77,23 +179,24 @@ export function createChatHandler(options: ChatApiHandlerOptions) {
     const savedConfig = await options.getConfig();
     const config: SupportBotConfig = { ...DEFAULT_CONFIG, ...savedConfig };
 
-    const apiKey = options.apiKey ?? process.env.ANTHROPIC_API_KEY;
+    const apiKey = options.apiKey ?? process.env.OPENROUTER_API_KEY;
+    const lastMessage = messages[messages.length - 1]?.content ?? "";
     if (!apiKey) {
-      const lastMessage = messages[messages.length - 1]?.content ?? "";
       return new Response(createFallbackSupportReply(lastMessage), {
         headers: { "Content-Type": "text/plain; charset=utf-8" },
       });
     }
 
-    const anthropic = createAnthropic({ apiKey });
-
-    const result = streamText({
-      model: anthropic(config.model),
-      system: config.systemPrompt,
-      messages: messages.map((m) => ({ role: m.role, content: m.content })),
-      maxOutputTokens: 1024,
-    });
-
-    return result.toTextStreamResponse();
+    try {
+      const reply = await createOpenRouterSupportReply({ apiKey, config, messages });
+      return new Response(reply, {
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      });
+    } catch (error) {
+      console.error(error);
+      return new Response(createFallbackSupportReply(lastMessage), {
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      });
+    }
   };
 }

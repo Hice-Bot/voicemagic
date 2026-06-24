@@ -116,7 +116,7 @@ model Generation {
 }
 model SupportConfig {
   id               String   @id @default(cuid())
-  model            String   @default("claude-haiku-4-5-20251001")
+  model            String   @default("minimax/minimax-m3")
   systemPrompt     String   @default("You are a helpful support assistant. Answer questions clearly and concisely.")
   welcomeMessage   String   @default("Hi! How can I help you today?")
   title            String   @default("Support")

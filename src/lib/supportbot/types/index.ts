@@ -1,5 +1,5 @@
 export interface SupportBotConfig {
-  /** Anthropic model to use */
+  /** OpenRouter model slug to use */
   model: string;
   /** System prompt for the AI */
   systemPrompt: string;
@@ -23,7 +23,7 @@ export interface Message {
 }
 
 export interface SupportBotProps {
-  /** API endpoint — defaults to /api/support-chat */
+  /** API endpoint - defaults to /api/support-chat */
   apiEndpoint?: string;
   /** Override config (merged over server config) */
   config?: Partial<SupportBotConfig>;
@@ -48,12 +48,12 @@ export interface ChatApiRequest {
 export interface ChatApiHandlerOptions {
   /** Returns the current config for this installation */
   getConfig: () => Promise<SupportBotConfig> | SupportBotConfig;
-  /** Your Anthropic API key — or omit to use ANTHROPIC_API_KEY env var */
+  /** Your OpenRouter API key, or omit to use OPENROUTER_API_KEY env var */
   apiKey?: string;
 }
 
 export const DEFAULT_CONFIG: SupportBotConfig = {
-  model: "claude-haiku-4-5-20251001",
+  model: "minimax/minimax-m3",
   systemPrompt:
     "You are a helpful support assistant. Answer questions clearly and concisely. If you don't know something, say so honestly.",
   welcomeMessage: "Hi! How can I help you today?",

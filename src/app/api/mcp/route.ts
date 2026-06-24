@@ -7,7 +7,7 @@ import { chatterbox } from "@/lib/chatterbox-client";
 import { uploadAudio } from "@/lib/r2";
 import { authenticateApiRequest } from "@/lib/api-auth";
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
-import { normalizeVoiceDisplay } from "@/features/voices/lib/voice-display";
+import { normalizeVoiceList, sortVoiceDisplayList } from "@/features/voices/lib/voice-display";
 
 async function handleMcpRequest(request: Request): Promise<Response> {
   let orgId: string;
@@ -50,10 +50,10 @@ async function handleMcpRequest(request: Request): Promise<Response> {
           {
             type: "text" as const,
             text: JSON.stringify({
-              voices: voices.map(({ categories, ...voice }) => ({
-                ...normalizeVoiceDisplay(voice),
+              voices: sortVoiceDisplayList(normalizeVoiceList(voices.map(({ categories, ...voice }) => ({
+                ...voice,
                 category: categories[0]?.category ?? "GENERAL",
-              })),
+              })))),
             }, null, 2),
           },
         ],

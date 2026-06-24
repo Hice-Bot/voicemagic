@@ -14,6 +14,8 @@ const planInputSchema = z.object({
   sortOrder: z.number().int(),
 });
 
+const DEFAULT_SUPPORT_MODEL = "minimax/minimax-m3";
+
 export const adminRouter = createTRPCRouter({
   getOverview: adminProcedure.query(async () => {
     const clerk = await clerkClient();
@@ -215,7 +217,9 @@ export const adminRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       let cfg = await prisma.supportConfig.findFirst();
       if (!cfg) {
-        cfg = await prisma.supportConfig.create({ data: {} });
+        cfg = await prisma.supportConfig.create({
+          data: { model: DEFAULT_SUPPORT_MODEL },
+        });
       }
       const maxOrder = await prisma.supportKnowledgeBase.count({ where: { configId: cfg.id } });
       return prisma.supportKnowledgeBase.create({

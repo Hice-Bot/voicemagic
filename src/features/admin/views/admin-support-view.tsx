@@ -175,7 +175,8 @@ export function AdminSupportView() {
     );
   }
 
-  const config: SupportBotConfig = { ...DEFAULT_CONFIG, ...(data ?? {}) };
+  const savedModel = data?.model?.includes("/") ? data.model : DEFAULT_CONFIG.model;
+  const config: SupportBotConfig = { ...DEFAULT_CONFIG, ...(data ?? {}), model: savedModel };
   const kbDocs = data?.knowledgeBase ?? [];
 
   async function handleAddDoc(title: string, content: string) {

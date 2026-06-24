@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { authenticateApiRequest } from "@/lib/api-auth";
-import { normalizeVoiceDisplay } from "@/features/voices/lib/voice-display";
+import { normalizeVoiceList, sortVoiceDisplayList } from "@/features/voices/lib/voice-display";
 
 export async function GET(request: Request) {
   let orgId: string;
@@ -29,9 +29,9 @@ export async function GET(request: Request) {
   });
 
   return Response.json({
-    voices: voices.map(({ categories, ...voice }) => ({
-      ...normalizeVoiceDisplay(voice),
+    voices: sortVoiceDisplayList(normalizeVoiceList(voices.map(({ categories, ...voice }) => ({
+      ...voice,
       category: categories[0]?.category ?? "GENERAL",
-    })),
+    })))),
   });
 }

@@ -27,7 +27,7 @@ For billing, sale, or handoff questions that require a person, direct users to j
 `.trim();
 
 export const VOICEMAGIC_SUPPORT_CONFIG: SupportBotConfig = {
-  model: "claude-haiku-4-5-20251001",
+  model: "minimax/minimax-m3",
   title: "Voicemagic Support",
   welcomeMessage: "Need help with Voicemagic? Ask about voices, credits, API/MCP setup, or account limits.",
   inputPlaceholder: "Ask about Voicemagic...",

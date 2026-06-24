@@ -6,9 +6,7 @@ import { DEFAULT_CONFIG } from "../types";
 import { cn } from "../lib/utils";
 
 const MODELS = [
-  { value: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5 (fastest)" },
-  { value: "claude-sonnet-4-6", label: "Claude Sonnet 4.6 (balanced)" },
-  { value: "claude-opus-4-7", label: "Claude Opus 4.7 (most capable)" },
+  { value: "minimax/minimax-m3", label: "MiniMax M3 via OpenRouter (latest)" },
 ];
 
 function Field({
@@ -146,7 +144,7 @@ export function AdminConfigPanel({ config, onSave, className }: AdminConfigProps
       <div className="rounded-lg border border-border bg-card p-5 flex flex-col gap-5">
         <Field
           label="AI model"
-          hint="Haiku is fastest and cheapest; Opus is most capable"
+          hint="Support chat uses OpenRouter. Production needs OPENROUTER_API_KEY."
         >
           <select
             value={form.model}

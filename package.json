@@ -11,8 +11,6 @@
     "sync-api": "tsx scripts/sync-api.ts"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.71",
-    "@anthropic-ai/sdk": "^0.95.1",
     "@aws-sdk/client-s3": "^3.997.0",
     "@aws-sdk/s3-request-presigner": "^3.997.0",
     "@base-ui/react": "^1.2.0",
