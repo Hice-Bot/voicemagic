@@ -22,10 +22,12 @@ export function TextToSpeechDetailView({
   const [ 
     generationQuery,
     voicesQuery,
+    billingQuery,
   ] = useSuspenseQueries({
     queries: [
       trpc.generations.getById.queryOptions({ id: generationId }),
-      trpc.voices.getAll.queryOptions()
+      trpc.voices.getAll.queryOptions(),
+      trpc.billing.getStatus.queryOptions(),
     ],
   });
 
@@ -65,7 +67,7 @@ export function TextToSpeechDetailView({
       <TextToSpeechForm key={generationId} defaultValues={defaultValues}>
         <div className="flex min-h-0 flex-1 overflow-hidden">
           <div className="flex min-h-0 flex-1 flex-col">
-            <TextInputPanel />
+            <TextInputPanel creditStatus={billingQuery.data} />
             <VoicePreviewMobile
               audioUrl={data.audioUrl}
               voice={generationVoice}

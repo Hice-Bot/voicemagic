@@ -1,6 +1,6 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQueries } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 import { TextInputPanel } from "@/features/text-to-speech/components/text-input-panel";
@@ -19,11 +19,14 @@ export function TextToSpeechView({
   initialValues?: Partial<TTSFormValues>;
 }) {
   const trpc = useTRPC();
-  const {
-    data,
-  } = useSuspenseQuery(trpc.voices.getAll.queryOptions());
+  const [voicesQuery, billingQuery] = useSuspenseQueries({
+    queries: [
+      trpc.voices.getAll.queryOptions(),
+      trpc.billing.getStatus.queryOptions(),
+    ],
+  });
 
-  const allVoices = data.voices;
+  const allVoices = voicesQuery.data.voices;
   const customVoices = allVoices.filter((v) => v.variant === "CUSTOM");
   const systemVoices = allVoices.filter((v) => v.variant === "SYSTEM");
   const fallbackVoiceId = allVoices[0]?.id ?? "";
@@ -46,7 +49,7 @@ export function TextToSpeechView({
       <TextToSpeechForm defaultValues={defaultValues}>
         <div className="flex min-h-0 flex-1 overflow-hidden">
           <div className="flex min-h-0 flex-1 flex-col">
-            <TextInputPanel />
+            <TextInputPanel creditStatus={billingQuery.data} />
             <VoicePreviewPlaceholder />
           </div>
           <SettingsPanel />

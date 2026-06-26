@@ -11,6 +11,7 @@ export default async function TextToSpeechDetailPage({
   prefetch(trpc.generations.getById.queryOptions({ id: generationId }));
   prefetch(trpc.voices.getAll.queryOptions());
   prefetch(trpc.generations.getAll.queryOptions());
+  prefetch(trpc.billing.getStatus.queryOptions());
 
   return (
     <HydrateClient>

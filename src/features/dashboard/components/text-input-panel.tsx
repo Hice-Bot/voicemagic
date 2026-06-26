@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Coins } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-import { 
-  COST_PER_UNIT, 
-  TEXT_MAX_LENGTH
-} from "@/features/text-to-speech/data/constants";
+import { CreditEstimateBadge } from "@/features/text-to-speech/components/credit-estimate-badge";
+import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
+import { useTRPC } from "@/trpc/client";
 
 export function TextInputPanel() {
   const [text, setText] = useState("");
   const router = useRouter();
+  const trpc = useTRPC();
+  const { data: billingData } = useQuery(trpc.billing.getStatus.queryOptions());
 
   const handleGenerate = () => {
     const trimmed = text.trim();
@@ -41,23 +41,9 @@ export function TextInputPanel() {
 
           {/* Bottom info */}
 
-          <div className="flex items-center justify-between">
-            <Badge variant="outline" className="gap-1.5 border-dashed">
-              <Coins className="size-3 text-chart-5" />
-              <span className="text-xs">
-                {text.length === 0 ? (
-                  "Start typing to estimate"
-                ) : (
-                  <>
-                    <span className="tabular-nums">
-                      ${(text.length * COST_PER_UNIT).toFixed(4)}
-                    </span>{" "}
-                    estimated
-                  </>
-                )}
-              </span>
-            </Badge>
-            <span className="text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <CreditEstimateBadge text={text} status={billingData} />
+            <span className="shrink-0 text-xs text-muted-foreground">
               {text.length.toLocaleString()} / {TEXT_MAX_LENGTH.toLocaleString()} characters
             </span>
           </div>
