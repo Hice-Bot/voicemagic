@@ -44,19 +44,22 @@ export const authProcedure = baseProcedure.use(async ({ next }) => {
   });
 });
 
-// Admin-only procedure — userId must be in ADMIN_USER_IDS env var
+// Admin-only procedure - userId must be in ADMIN_USER_IDS env var
 export const adminProcedure = baseProcedure.use(async ({ next }) => {
   const { userId } = await auth();
   if (!userId) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-  const adminIds = (process.env.ADMIN_USER_IDS ?? "").split(",").filter(Boolean);
+  const adminIds = (process.env.ADMIN_USER_IDS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
   if (!adminIds.includes(userId)) throw new TRPCError({ code: "FORBIDDEN" });
 
   return next({ ctx: { userId } });
 });
 
 // Individual-user procedure. orgId is aliased to userId so existing
-// call sites that reference ctx.orgId continue to work without changes —
+// call sites that reference ctx.orgId continue to work without changes -
 // each user is effectively their own org for data-scoping purposes.
 export const orgProcedure = baseProcedure.use(async ({ next }) => {
   const { userId } = await auth();

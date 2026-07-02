@@ -45,8 +45,9 @@ export function AdminUsersView() {
         />
       </div>
 
-      <div className="rounded-lg border border-border overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="overflow-hidden rounded-lg border border-border">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/40">
               <th className="text-left px-4 py-2.5 font-medium text-muted-foreground">User</th>
@@ -92,7 +93,8 @@ export function AdminUsersView() {
                   </tr>
                 ))}
           </tbody>
-        </table>
+          </table>
+        </div>
         {!isLoading && (data?.users.length ?? 0) === 0 && (
           <div className="py-12 text-center text-sm text-muted-foreground">No users found</div>
         )}

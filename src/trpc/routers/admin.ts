@@ -87,8 +87,8 @@ export const adminRouter = createTRPCRouter({
         totalCount,
         users: users.map((u) => ({
           id: u.id,
-          name: [u.firstName, u.lastName].filter(Boolean).join(" ") || u.username || "â€”",
-          email: u.emailAddresses[0]?.emailAddress ?? "â€”",
+          name: [u.firstName, u.lastName].filter(Boolean).join(" ") || u.username || "Unknown user",
+          email: u.emailAddresses[0]?.emailAddress ?? "No email",
           imageUrl: u.imageUrl,
           createdAt: new Date(u.createdAt).toISOString(),
           lastSignInAt: u.lastSignInAt ? new Date(u.lastSignInAt).toISOString() : null,

@@ -81,7 +81,7 @@ function PlanRow({
       </td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="size-7" onClick={() => onEdit(plan)}>
+          <Button variant="ghost" size="icon" className="size-7" aria-label={`Edit ${plan.label}`} onClick={() => onEdit(plan)}>
             <Pencil className="size-3.5" />
           </Button>
           <Button
@@ -89,6 +89,7 @@ function PlanRow({
             className="size-7 text-muted-foreground hover:text-destructive"
             onClick={() => onDelete(plan.id)}
             disabled={isDeleting}
+            aria-label={`Delete ${plan.label}`}
           >
             <Trash2 className="size-3.5" />
           </Button>
@@ -119,7 +120,7 @@ function PlanForm({
     <div className="rounded-xl border border-border bg-card p-5 flex flex-col gap-4">
       <h3 className="text-sm font-semibold">{form.id ? "Edit plan" : "New plan"}</h3>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Label className="text-xs">Key (unique, e.g. &quot;free&quot;)</Label>
           <Input value={form.key} onChange={(e) => set("key", e.target.value)} placeholder="free" className="h-8 text-sm" />
@@ -210,7 +211,7 @@ export function AdminPlansView() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Plans</h1>
           <p className="text-sm text-muted-foreground mt-1">Configure subscription tiers and their limits</p>
@@ -231,8 +232,9 @@ export function AdminPlansView() {
         />
       )}
 
-      <div className="rounded-lg border border-border overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="overflow-hidden rounded-lg border border-border">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[900px] text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/40">
               <th className="text-left px-4 py-2.5 font-medium text-muted-foreground">Plan</th>
@@ -262,12 +264,17 @@ export function AdminPlansView() {
                     key={plan.id}
                     plan={plan}
                     onEdit={setEditing}
-                    onDelete={(id) => deleteMut.mutate({ id })}
+                    onDelete={(id) => {
+                      if (window.confirm("Delete this plan? This cannot be undone.")) {
+                        deleteMut.mutate({ id });
+                      }
+                    }}
                     isDeleting={deleteMut.isPending}
                   />
                 ))}
           </tbody>
-        </table>
+          </table>
+        </div>
         {!isLoading && (plans?.length ?? 0) === 0 && (
           <div className="py-12 text-center text-sm text-muted-foreground">
             No plans yet. Click &quot;New plan&quot; to create your first one.

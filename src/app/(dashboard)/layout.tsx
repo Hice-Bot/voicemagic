@@ -18,7 +18,10 @@ export default async function DashboardLayout({
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   const { userId } = await auth();
-  const adminIds = (process.env.ADMIN_USER_IDS ?? "").split(",").filter(Boolean);
+  const adminIds = (process.env.ADMIN_USER_IDS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
   const isAdmin = !!userId && adminIds.includes(userId);
 
   return (

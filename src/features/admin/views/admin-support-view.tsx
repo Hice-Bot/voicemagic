@@ -64,9 +64,12 @@ function KbDocRow({
 
   async function handleSave(title: string, content: string) {
     setSaving(true);
-    await onUpdate(doc.id, title, content);
-    setSaving(false);
-    setEditing(false);
+    try {
+      await onUpdate(doc.id, title, content);
+      setEditing(false);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (editing) {
@@ -104,7 +107,13 @@ function KbDocRow({
             variant="ghost"
             size="icon"
             className="size-7 text-muted-foreground hover:text-destructive"
-            onClick={(e) => { e.stopPropagation(); onDelete(doc.id); }}
+            aria-label={`Delete ${doc.title}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (window.confirm("Delete this knowledge-base document? This cannot be undone.")) {
+                onDelete(doc.id);
+              }
+            }}
           >
             <Trash2 className="size-3.5" />
           </Button>
@@ -141,6 +150,7 @@ export function AdminSupportView() {
     trpc.admin.addKbDoc.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries(trpc.admin.getSupportConfig.queryFilter());
+        toast.success("Document added");
         setShowAddForm(false);
       },
       onError() { toast.error("Failed to add document"); },
@@ -181,12 +191,15 @@ export function AdminSupportView() {
 
   async function handleAddDoc(title: string, content: string) {
     setAddingSaving(true);
-    await addKbMutation.mutateAsync({ title, content });
-    setAddingSaving(false);
+    try {
+      await addKbMutation.mutateAsync({ title, content });
+    } finally {
+      setAddingSaving(false);
+    }
   }
 
   return (
-    <div className="max-w-2xl flex flex-col gap-8">
+    <div className="flex w-full max-w-3xl flex-col gap-8">
       <AdminConfigPanel
         config={config}
         onSave={async (updated) => { await upsertMutation.mutateAsync(updated); }}

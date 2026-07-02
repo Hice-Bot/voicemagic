@@ -69,7 +69,7 @@ export function AdminOverviewView() {
         <p className="text-sm text-muted-foreground mt-1">Platform statistics</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <StatCard title="Total Users" value={data?.totalUsers ?? 0} icon={Users} loading={isLoading} />
         <StatCard title="Generations" value={data?.totalGenerations ?? 0} icon={Zap} loading={isLoading} />
         <StatCard title="Cloned Voices" value={data?.totalVoices ?? 0} icon={Mic2} loading={isLoading} />

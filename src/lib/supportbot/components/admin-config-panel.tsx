@@ -43,6 +43,8 @@ export function AdminConfigPanel({ config, onSave, className }: AdminConfigProps
     try {
       await onSave(form);
       setSaved(true);
+    } catch {
+      setSaved(false);
     } finally {
       setSaving(false);
     }
