@@ -192,7 +192,7 @@ function Nav() {
           <Link href="https://voicemagic.dev/pricing">Pricing</Link>
         </div>
         <div className="nav-ctas">
-          <Link href="/sign-in" className="nav-signin">Sign in</Link>
+          <a href="/sign-in" className="nav-signin">Sign in</a>
           <Link href="https://voicemagic.dev/pricing" className="btn btn-primary btn-sm">Start for free</Link>
         </div>
       </div>
@@ -560,7 +560,7 @@ const PRICING_PLANS = [
     voiceLimit: "1 custom voice",
     description: "Try Voicemagic, test the voices, and generate real audio without putting a card on file.",
     cta: "Start free",
-    href: "/sign-up",
+    href: "/api/billing/simulate?plan=free",
     features: [
       "200+ built-in voices",
       "10k monthly generation credits",
@@ -580,7 +580,7 @@ const PRICING_PLANS = [
     voiceLimit: "10 custom voices",
     description: "The practical plan for videos, podcasts, support snippets, and weekly production work.",
     cta: "Upgrade to Standard",
-    href: "/sign-up",
+    href: "/api/billing/simulate?plan=standard",
     highlighted: true,
     features: [
       "Everything in Free",
@@ -602,7 +602,7 @@ const PRICING_PLANS = [
     voiceLimit: "50 custom voices",
     description: "For teams, automation, API workflows, and larger content libraries that need headroom.",
     cta: "Go Pro",
-    href: "/sign-up",
+    href: "/api/billing/simulate?plan=pro",
     features: [
       "Everything in Standard",
       "1M monthly generation credits",
@@ -662,13 +662,13 @@ export function PricingSection() {
               <span>1 credit ≈ 1 character</span>
             </div>
 
-            <Link
+            <a
               href={plan.href}
               className={`price-cta${plan.highlighted ? " price-cta-primary" : ""}`}
             >
               {plan.cta}
               <span>→</span>
-            </Link>
+            </a>
 
             <ul className="price-features">
               {plan.features.map((feature) => (

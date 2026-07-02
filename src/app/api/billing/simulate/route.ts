@@ -21,16 +21,14 @@ function getPublicUrl(request: Request, path: string) {
   return new URL(path, request.url);
 }
 
-export async function POST(request: Request) {
-  if (!isBillingSimulationEnabled()) {
-    return Response.json({ error: "Billing simulation is disabled" }, { status: 404 });
-  }
-
-  const formData = await request.formData();
-  const plan = formData.get("plan");
-
+async function handleSimulatedPlanSelection(request: Request, plan: FormDataEntryValue | string | null) {
   if (typeof plan !== "string" || !PLAN_KEYS.has(plan)) {
     return Response.json({ error: "Invalid simulated plan" }, { status: 400 });
+  }
+
+  if (!isBillingSimulationEnabled()) {
+    const { userId } = await auth();
+    return NextResponse.redirect(getPublicUrl(request, userId ? "/text-to-speech" : "/sign-up"), 303);
   }
 
   const cookieStore = await cookies();
@@ -44,4 +42,14 @@ export async function POST(request: Request) {
 
   const { userId } = await auth();
   return NextResponse.redirect(getPublicUrl(request, userId ? "/text-to-speech" : "/sign-up"), 303);
+}
+
+export async function GET(request: Request) {
+  const plan = new URL(request.url).searchParams.get("plan");
+  return handleSimulatedPlanSelection(request, plan);
+}
+
+export async function POST(request: Request) {
+  const formData = await request.formData();
+  return handleSimulatedPlanSelection(request, formData.get("plan"));
 }

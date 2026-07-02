@@ -75,15 +75,12 @@ function SalePricingTable() {
               <span className="price-cadence">/{plan.cadence}</span>
             </div>
             <p className="price-desc">{plan.description}</p>
-            <form action="/api/billing/simulate" method="post">
-              <input type="hidden" name="plan" value={plan.key} />
-              <button
-                className={`price-cta${plan.highlighted ? " price-cta-primary" : ""}`}
-                type="submit"
-              >
-                {plan.key === "free" ? "Start free" : `Choose ${plan.name}`}
-              </button>
-            </form>
+            <a
+              className={`price-cta${plan.highlighted ? " price-cta-primary" : ""}`}
+              href={`/api/billing/simulate?plan=${plan.key}`}
+            >
+              {plan.key === "free" ? "Start free" : `Choose ${plan.name}`}
+            </a>
             <ul className="price-features">
               {plan.features.map((feature) => (
                 <li key={feature}>{feature}</li>
@@ -137,7 +134,7 @@ export default function PricingPage() {
             <Link href="/docs">API</Link>
           </div>
           <div className="nav-ctas">
-            <Link href="/sign-in" className="nav-signin">Sign in</Link>
+            <a href="/sign-in" className="nav-signin">Sign in</a>
           </div>
         </div>
       </nav>
