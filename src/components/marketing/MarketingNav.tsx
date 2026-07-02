@@ -21,12 +21,12 @@ export function MarketingNav() {
           <Link href="/pricing" className="hover:text-white">Pricing</Link>
           <Link href="/about" className="hover:text-white">About</Link>
           <Link href="/contact" className="hover:text-white">Contact</Link>
-          <a
+          <Link
             href="/sign-in"
             className="rounded-full border border-white/25 bg-white/10 px-3 py-1.5 font-semibold text-white hover:bg-white hover:text-[#07040f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Sign in
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

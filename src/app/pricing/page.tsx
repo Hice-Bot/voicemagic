@@ -134,7 +134,7 @@ export default function PricingPage() {
             <Link href="/docs">API</Link>
           </div>
           <div className="nav-ctas">
-            <a href="/sign-in" className="nav-signin">Sign in</a>
+            <Link href="/sign-in" className="nav-signin">Sign in</Link>
           </div>
         </div>
       </nav>

@@ -192,7 +192,7 @@ function Nav() {
           <Link href="https://voicemagic.dev/pricing">Pricing</Link>
         </div>
         <div className="nav-ctas">
-          <a href="/sign-in" className="nav-signin">Sign in</a>
+          <Link href="/sign-in" className="nav-signin">Sign in</Link>
           <Link href="https://voicemagic.dev/pricing" className="btn btn-primary btn-sm">Start for free</Link>
         </div>
       </div>
